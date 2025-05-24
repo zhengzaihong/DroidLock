@@ -245,7 +245,7 @@ import com.zzh.droidlock.dpm.isDeviceOwner
 import com.zzh.droidlock.dpm.isProfileOwner
 import com.zzh.droidlock.dpm.setDefaultAffiliationID
 import com.zzh.droidlock.ui.Animations
-import com.zzh.droidlock.ui.theme.OwnDroidTheme
+import com.zzh.droidlock.ui.theme.DroidLockTheme
 import com.rosan.dhizuku.api.Dhizuku
 import com.zzh.droidlock.dpm.MtePolicy
 import com.zzh.droidlock.dpm.NetworkOptions
@@ -272,7 +272,7 @@ class MainActivity : FragmentActivity() {
         lifecycleScope.launch { delay(5000); setDefaultAffiliationID(context) }
         setContent {
             val theme by vm.theme.collectAsStateWithLifecycle()
-            OwnDroidTheme(theme) {
+            DroidLockTheme(theme) {
                 Home(vm)
             }
         }
@@ -334,7 +334,7 @@ fun Home(vm: MyViewModel) {
         composable<DelegatedAdmins> { DelegatedAdminsScreen(::navigateUp, ::navigate) }
         composable<AddDelegatedAdmin>{ AddDelegatedAdminScreen(it.toRoute(), ::navigateUp) }
         composable<DeviceInfo> { DeviceInfoScreen(::navigateUp) }
-        composable<LockScreenInfo> { LockScreenInfoScreen(::navigateUp) }
+//        composable<LockScreenInfo> { LockScreenInfoScreen(::navigateUp) }
         composable<SupportMessage> { SupportMessageScreen(::navigateUp) }
         composable<TransferOwnership> { TransferOwnershipScreen(::navigateUp) }
 
@@ -378,31 +378,31 @@ fun Home(vm: MyViewModel) {
         composable<OverrideApn> { OverrideApnScreen(::navigateUp) { navController.navigate(AddApnSetting, it) } }
         composable<AddApnSetting> { AddApnSettingScreen(it.arguments?.getParcelable("setting"), ::navigateUp) }
 
-        composable<WorkProfile> { WorkProfileScreen(::navigateUp, ::navigate) }
-        composable<OrganizationOwnedProfile> { OrganizationOwnedProfileScreen(::navigateUp) }
-        composable<CreateWorkProfile> { CreateWorkProfileScreen(::navigateUp) }
+//        composable<WorkProfile> { WorkProfileScreen(::navigateUp, ::navigate) }
+//        composable<OrganizationOwnedProfile> { OrganizationOwnedProfileScreen(::navigateUp) }
+//        composable<CreateWorkProfile> { CreateWorkProfileScreen(::navigateUp) }
         composable<SuspendPersonalApp> { SuspendPersonalAppScreen(::navigateUp) }
-        composable<CrossProfileIntentFilter> { CrossProfileIntentFilterScreen(::navigateUp) }
+//        composable<CrossProfileIntentFilter> { CrossProfileIntentFilterScreen(::navigateUp) }
         composable<DeleteWorkProfile> { DeleteWorkProfileScreen(::navigateUp) }
 
-        composable<ApplicationsList> {
-            AppChooserScreen(it.toRoute(), {
-                if(it == null) navigateUp() else navigate(ApplicationDetails(it))
-            }, {
-                SharedPrefs(context).applicationsListView = false
-                navController.navigate(ApplicationsFeatures) {
-                    popUpTo(Home)
-                }
-            })
-        }
-        composable<ApplicationsFeatures> {
-            ApplicationsFeaturesScreen(::navigateUp, ::navigate) {
-                SharedPrefs(context).applicationsListView = true
-                navController.navigate(ApplicationsList(true)) {
-                    popUpTo(Home)
-                }
-            }
-        }
+//        composable<ApplicationsList> {
+//            AppChooserScreen(it.toRoute(), {
+//                if(it == null) navigateUp() else navigate(ApplicationDetails(it))
+//            }, {
+//                SharedPrefs(context).applicationsListView = false
+//                navController.navigate(ApplicationsFeatures) {
+//                    popUpTo(Home)
+//                }
+//            })
+//        }
+//        composable<ApplicationsFeatures> {
+//            ApplicationsFeaturesScreen(::navigateUp, ::navigate) {
+//                SharedPrefs(context).applicationsListView = true
+//                navController.navigate(ApplicationsList(true)) {
+//                    popUpTo(Home)
+//                }
+//            }
+//        }
         composable<ApplicationDetails> { ApplicationDetailsScreen(it.toRoute(), ::navigateUp, ::navigate) }
         composable<Suspend> { SuspendScreen(::navigateUp) }
         composable<Hide> { HideScreen(::navigateUp) }
@@ -468,9 +468,9 @@ fun Home(vm: MyViewModel) {
             AppearanceScreen(::navigateUp, theme) { vm.theme.value = it }
         }
         composable<AppLockSettings> { AppLockSettingsScreen(::navigateUp) }
-        composable<ApiSettings> { ApiSettings(::navigateUp) }
-        composable<Notifications> { NotificationsScreen(::navigateUp) }
-        composable<About> { AboutScreen(::navigateUp) }
+//        composable<ApiSettings> { ApiSettings(::navigateUp) }
+//        composable<Notifications> { NotificationsScreen(::navigateUp) }
+//        composable<About> { AboutScreen(::navigateUp) }
 
         dialog<AppLock>(dialogProperties = DialogProperties(false, false)) {
             AppLockDialog(::navigateUp) { (context as? Activity)?.moveTaskToBack(true) }
@@ -556,23 +556,24 @@ private fun HomeScreen(onNavigate: (Any) -> Unit) {
                     if(activateType != "") { Text(text = activateType, color = colorScheme.onPrimary) }
                 }
             }
-            HomePageItem(R.string.system, R.drawable.android_fill0) { onNavigate(SystemManager) }
-            if(deviceOwner || profileOwner) { HomePageItem(R.string.network, R.drawable.wifi_fill0) { onNavigate(Network) } }
-            if(
-                (VERSION.SDK_INT < 24 && !deviceOwner) || (dpm.isProvisioningAllowed(DevicePolicyManager.ACTION_PROVISION_MANAGED_PROFILE) ||
-                                (profileOwner && dpm.isManagedProfile(receiver))
-                        )
-            ) {
-                HomePageItem(R.string.work_profile, R.drawable.work_fill0) { onNavigate(WorkProfile) }
-            }
-            if(deviceOwner || profileOwner) HomePageItem(R.string.applications, R.drawable.apps_fill0) {
-                onNavigate(if(SharedPrefs(context).applicationsListView) ApplicationsList(true) else ApplicationsFeatures)
-            }
+//            HomePageItem(R.string.system, R.drawable.android_fill0) { onNavigate(SystemManager) }
+
+//            if(deviceOwner || profileOwner) { HomePageItem(R.string.network, R.drawable.wifi_fill0) { onNavigate(Network) } }
+//            if(
+//                (VERSION.SDK_INT < 24 && !deviceOwner) || (dpm.isProvisioningAllowed(DevicePolicyManager.ACTION_PROVISION_MANAGED_PROFILE) ||
+//                                (profileOwner && dpm.isManagedProfile(receiver))
+//                        )
+//            ) {
+//                HomePageItem(R.string.work_profile, R.drawable.work_fill0) { onNavigate(WorkProfile) }
+//            }
+//            if(deviceOwner || profileOwner) HomePageItem(R.string.applications, R.drawable.apps_fill0) {
+//                onNavigate(if(SharedPrefs(context).applicationsListView) ApplicationsList(true) else ApplicationsFeatures)
+//            }
             if(VERSION.SDK_INT >= 24 && (profileOwner || deviceOwner)) {
                 HomePageItem(R.string.user_restriction, R.drawable.person_off) { onNavigate(UserRestriction) }
             }
-            HomePageItem(R.string.users,R.drawable.manage_accounts_fill0) { onNavigate(Users) }
-            if(deviceOwner || profileOwner) HomePageItem(R.string.password_and_keyguard, R.drawable.password_fill0) { onNavigate(Password) }
+//            HomePageItem(R.string.users,R.drawable.manage_accounts_fill0) { onNavigate(Users) }
+//            if(deviceOwner || profileOwner) HomePageItem(R.string.password_and_keyguard, R.drawable.password_fill0) { onNavigate(Password) }
             HomePageItem(R.string.settings, R.drawable.settings_fill0) { onNavigate(Settings) }
             Spacer(Modifier.padding(vertical = 20.dp))
         }

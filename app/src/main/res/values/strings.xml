@@ -121,9 +121,9 @@
     <string name="activate_device_admin_here">Activate Device admin here.</string>
 
     <!--Receiver-->
-    <string name="onEnabled">OwnDroid: Enabled</string>
-    <string name="onDisabled">OwnDroid: Disabled</string>
-    <string name="create_work_profile_success">OwnDroid: Create work profile success</string>
+    <string name="onEnabled">DroidLock: Enabled</string>
+    <string name="onDisabled">DroidLock: Disabled</string>
+    <string name="create_work_profile_success">DroidLock: Create work profile success</string>
 
     <!--Dhizuku-->
     <string name="dhizuku" translatable="false">Dhizuku</string>
@@ -707,7 +707,7 @@
     <string name="info_nearby_app_streaming_policy">App streaming is when the device starts an app on a virtual display and sends a video stream of the app to nearby devices.</string>
     <string name="info_nearby_notification_streaming_policy">Notification streaming is sending notification data from pre-installed apps to nearby devices.</string>
     <string name="info_lock_task_packages">Only packages in lock task packages list can be launched in lock task mode.</string>
-    <string name="info_start_lock_task_mode">If you allow notifications in Lock task features, OwnDroid will pop a notification when lock task mode start successfully. You can exit lock task mode by click that notification.</string>
+    <string name="info_start_lock_task_mode">If you allow notifications in Lock task features, DroidLock will pop a notification when lock task mode start successfully. You can exit lock task mode by click that notification.</string>
     <string name="info_security_log">If a Device owner use this function, all users should be affiliated.</string>
     <string name="info_pre_reboot_security_log">Not all devices support pre-reboot security logs.</string>
     <string name="info_disable_account_management">When account management is disabled for an account type, adding or removing an account of that type will not be possible.</string>
@@ -728,7 +728,7 @@
     <string name="info_install_existing_app">Install an existing package that has been installed in another user, or has been kept after uninstall.</string>
     <string name="info_enable_system_app">Re-enable a system app that was disabled by default when the user was initialized.</string>
     <string name="info_headless_system_user_mode">Headless system user mode means the system user runs system services and some system UI, but it is not associated with any real person and additional users must be created to be associated with real persons.</string>
-    <string name="info_logout">If the current user is not switched by OwnDroid, this function cannot be used.</string>
+    <string name="info_logout">If the current user is not switched by DroidLock, this function cannot be used.</string>
     <string name="info_affiliation_id">When Device owner create a managed user, the managed user isn\'t affiliated. In order to make the managed user affiliated with the Device owner, you should set same affiliated IDs in main user and managed user</string>
     <string name="info_password_complexity">None: no password\nLow: pattern, PIN (with repeating or ordered sequences)\nMedium: PIN (with no repeating or ordered sequences, length at least 4), alphabetic (length at least 4), alphanumeric (length at least 4)\nHigh: PIN (with no repeating or ordered sequences, length at least 8), alphabetic (length at least 6), alphanumeric (length at least 6)</string>
     <string name="info_reset_password">Set a new lockscreen password. The length of this password must be at least 4 digits. Keep it empty to remove password.\nIf you set a numeric password that length is 6 or lower, it will set as PIN</string>

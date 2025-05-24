@@ -16,7 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.Dialog
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.zzh.droidlock.ui.theme.OwnDroidTheme
+import com.zzh.droidlock.ui.theme.DroidLockTheme
 import com.zzh.droidlock.AppLockDialog
 import kotlin.system.exitProcess
 
@@ -27,7 +27,7 @@ class ManageSpaceActivity: FragmentActivity() {
         val vm by viewModels<MyViewModel>()
         setContent {
             val theme by vm.theme.collectAsStateWithLifecycle()
-            OwnDroidTheme(theme) {
+            DroidLockTheme(theme) {
                 var appLockDialog by remember { mutableStateOf(!SharedPrefs(this).lockPassword.isNullOrEmpty()) }
                 if(appLockDialog) {
                     Dialog(::finish) {

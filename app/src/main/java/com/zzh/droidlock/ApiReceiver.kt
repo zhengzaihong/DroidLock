@@ -10,7 +10,7 @@ import com.zzh.droidlock.dpm.getReceiver
 class ApiReceiver: BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val requestKey = intent.getStringExtra("key")
-        var log = "OwnDroid API request received. action: ${intent.action}\nkey: $requestKey"
+        var log = "DroidLock API request received. action: ${intent.action}\nkey: $requestKey"
         val sp = SharedPrefs(context)
         if(!sp.isApiEnabled) return
         val key = sp.apiKey

@@ -72,7 +72,7 @@ import androidx.lifecycle.viewModelScope
 import com.zzh.droidlock.dpm.parsePackageInstallerMessage
 import com.zzh.droidlock.ui.FullWidthCheckBoxItem
 import com.zzh.droidlock.ui.FullWidthRadioButtonItem
-import com.zzh.droidlock.ui.theme.OwnDroidTheme
+import com.zzh.droidlock.ui.theme.DroidLockTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -90,7 +90,7 @@ class AppInstallerActivity:FragmentActivity() {
         vm.initialize(intent)
         setContent {
             val theme by myVm.theme.collectAsStateWithLifecycle()
-            OwnDroidTheme(theme) {
+            DroidLockTheme(theme) {
                 val installing by vm.installing.collectAsStateWithLifecycle()
                 val options by vm.options.collectAsStateWithLifecycle()
                 val packages by vm.packages.collectAsStateWithLifecycle()

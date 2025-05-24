@@ -75,18 +75,18 @@ fun PermissionsScreen(onNavigateUp: () -> Unit, onNavigate: (Any) -> Unit, onNav
     var bindingShizuku by remember { mutableStateOf(false) }
     val enrollmentSpecificId = if(VERSION.SDK_INT >= 31 && (deviceOwner || profileOwner)) dpm.enrollmentSpecificId else ""
     MyScaffold(R.string.permissions, onNavigateUp, 0.dp) {
-        if(!dpm.isDeviceOwnerApp(context.packageName)) {
-            SwitchItem(
-                R.string.dhizuku,
-                getState = { SharedPrefs(context).dhizuku },
-                onCheckedChange = { toggleDhizukuMode(it, context) },
-                onClickBlank = { dialog = 4 }
-            )
-        }
-        FunctionItem(
-            R.string.device_admin, stringResource(if(deviceAdmin) R.string.activated else R.string.deactivated),
-            operation = { onNavigate(DeviceAdmin) }
-        )
+//        if(!dpm.isDeviceOwnerApp(context.packageName)) {
+//            SwitchItem(
+//                R.string.dhizuku,
+//                getState = { SharedPrefs(context).dhizuku },
+//                onCheckedChange = { toggleDhizukuMode(it, context) },
+//                onClickBlank = { dialog = 4 }
+//            )
+//        }
+//        FunctionItem(
+//            R.string.device_admin, stringResource(if(deviceAdmin) R.string.activated else R.string.deactivated),
+//            operation = { onNavigate(DeviceAdmin) }
+//        )
         if(profileOwner || !userManager.isSystemUser) {
             FunctionItem(
                 R.string.profile_owner, stringResource(if(profileOwner) R.string.activated else R.string.deactivated),
@@ -99,58 +99,58 @@ fun PermissionsScreen(onNavigateUp: () -> Unit, onNavigate: (Any) -> Unit, onNav
                 operation = { onNavigate(DeviceOwner) }
             )
         }
-        FunctionItem(R.string.shizuku) {
-            try {
-                if(Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED) {
-                    bindingShizuku = true
-                    fun onBind(binder: IBinder) {
-                        bindingShizuku = false
-                        onNavigateToShizuku(bundleOf("binder" to binder))
-                    }
-                    try {
-                        controlShizukuService(context, ::onBind, { bindingShizuku = false }, true)
-                    } catch(e: Exception) {
-                        e.printStackTrace()
-                        bindingShizuku = false
-                    }
-                } else if(Shizuku.shouldShowRequestPermissionRationale()) {
-                    Toast.makeText(context, R.string.permission_denied, Toast.LENGTH_SHORT).show()
-                } else {
-                    Sui.init(context.packageName)
-                    fun requestPermissionResultListener(requestCode: Int, grantResult: Int) {
-                        if(grantResult != PackageManager.PERMISSION_GRANTED) {
-                            Toast.makeText(context, R.string.permission_denied, Toast.LENGTH_SHORT).show()
-                        }
-                        Shizuku.removeRequestPermissionResultListener(::requestPermissionResultListener)
-                    }
-                    Shizuku.addRequestPermissionResultListener(::requestPermissionResultListener)
-                    Shizuku.requestPermission(0)
-                }
-            } catch(_: IllegalStateException) {
-                Toast.makeText(context, R.string.shizuku_not_started, Toast.LENGTH_SHORT).show()
-            }
-        }
-        if(VERSION.SDK_INT >= 26 && (deviceOwner || profileOwner))
-            FunctionItem(R.string.delegated_admins) { onNavigate(DelegatedAdmins) }
-        FunctionItem(R.string.device_info, icon = R.drawable.perm_device_information_fill0) { onNavigate(DeviceInfo) }
-        if(VERSION.SDK_INT >= 24 && (profileOwner || (VERSION.SDK_INT >= 26 && deviceOwner))) {
-            FunctionItem(R.string.org_name, icon = R.drawable.corporate_fare_fill0) { dialog = 2 }
-        }
-        if(VERSION.SDK_INT >= 31 && (profileOwner || deviceOwner)) {
-            FunctionItem(R.string.org_id, icon = R.drawable.corporate_fare_fill0) { dialog = 3 }
-        }
-        if(enrollmentSpecificId != "") {
-            FunctionItem(R.string.enrollment_specific_id, icon = R.drawable.id_card_fill0) { dialog = 1 }
-        }
-        if(VERSION.SDK_INT >= 24 && (deviceOwner || dpm.isOrgProfile(receiver))) {
-            FunctionItem(R.string.lock_screen_info, icon = R.drawable.screen_lock_portrait_fill0) { onNavigate(LockScreenInfo) }
-        }
-        if(VERSION.SDK_INT >= 24 && deviceAdmin) {
-            FunctionItem(R.string.support_messages, icon = R.drawable.chat_fill0) { onNavigate(SupportMessage) }
-        }
-        if(VERSION.SDK_INT >= 28 && (deviceOwner || profileOwner)) {
-            FunctionItem(R.string.transfer_ownership, icon = R.drawable.admin_panel_settings_fill0) { onNavigate(TransferOwnership) }
-        }
+//        FunctionItem(R.string.shizuku) {
+//            try {
+//                if(Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED) {
+//                    bindingShizuku = true
+//                    fun onBind(binder: IBinder) {
+//                        bindingShizuku = false
+//                        onNavigateToShizuku(bundleOf("binder" to binder))
+//                    }
+//                    try {
+//                        controlShizukuService(context, ::onBind, { bindingShizuku = false }, true)
+//                    } catch(e: Exception) {
+//                        e.printStackTrace()
+//                        bindingShizuku = false
+//                    }
+//                } else if(Shizuku.shouldShowRequestPermissionRationale()) {
+//                    Toast.makeText(context, R.string.permission_denied, Toast.LENGTH_SHORT).show()
+//                } else {
+//                    Sui.init(context.packageName)
+//                    fun requestPermissionResultListener(requestCode: Int, grantResult: Int) {
+//                        if(grantResult != PackageManager.PERMISSION_GRANTED) {
+//                            Toast.makeText(context, R.string.permission_denied, Toast.LENGTH_SHORT).show()
+//                        }
+//                        Shizuku.removeRequestPermissionResultListener(::requestPermissionResultListener)
+//                    }
+//                    Shizuku.addRequestPermissionResultListener(::requestPermissionResultListener)
+//                    Shizuku.requestPermission(0)
+//                }
+//            } catch(_: IllegalStateException) {
+//                Toast.makeText(context, R.string.shizuku_not_started, Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//        if(VERSION.SDK_INT >= 26 && (deviceOwner || profileOwner))
+//            FunctionItem(R.string.delegated_admins) { onNavigate(DelegatedAdmins) }
+//        FunctionItem(R.string.device_info, icon = R.drawable.perm_device_information_fill0) { onNavigate(DeviceInfo) }
+//        if(VERSION.SDK_INT >= 24 && (profileOwner || (VERSION.SDK_INT >= 26 && deviceOwner))) {
+//            FunctionItem(R.string.org_name, icon = R.drawable.corporate_fare_fill0) { dialog = 2 }
+//        }
+//        if(VERSION.SDK_INT >= 31 && (profileOwner || deviceOwner)) {
+//            FunctionItem(R.string.org_id, icon = R.drawable.corporate_fare_fill0) { dialog = 3 }
+//        }
+//        if(enrollmentSpecificId != "") {
+//            FunctionItem(R.string.enrollment_specific_id, icon = R.drawable.id_card_fill0) { dialog = 1 }
+//        }
+//        if(VERSION.SDK_INT >= 24 && (deviceOwner || dpm.isOrgProfile(receiver))) {
+//            FunctionItem(R.string.lock_screen_info, icon = R.drawable.screen_lock_portrait_fill0) { onNavigate(LockScreenInfo) }
+//        }
+//        if(VERSION.SDK_INT >= 24 && deviceAdmin) {
+//            FunctionItem(R.string.support_messages, icon = R.drawable.chat_fill0) { onNavigate(SupportMessage) }
+//        }
+//        if(VERSION.SDK_INT >= 28 && (deviceOwner || profileOwner)) {
+//            FunctionItem(R.string.transfer_ownership, icon = R.drawable.admin_panel_settings_fill0) { onNavigate(TransferOwnership) }
+//        }
     }
     if(bindingShizuku) {
         Dialog(onDismissRequest = { bindingShizuku = false }) {

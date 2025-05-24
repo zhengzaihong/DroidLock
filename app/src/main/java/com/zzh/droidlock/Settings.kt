@@ -60,21 +60,10 @@ import java.util.Locale
 
 @Composable
 fun SettingsScreen(onNavigateUp: () -> Unit, onNavigate: (Any) -> Unit) {
-    val context = LocalContext.current
-    val exportLogsLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("text/plain")) {
-        if(it != null) exportLogs(context, it)
-    }
+//    val context = LocalContext.current
     MyScaffold(R.string.settings, onNavigateUp, 0.dp) {
-        FunctionItem(title = R.string.options, icon = R.drawable.tune_fill0) { onNavigate(SettingsOptions) }
         FunctionItem(title = R.string.appearance, icon = R.drawable.format_paint_fill0) { onNavigate(Appearance) }
         FunctionItem(R.string.app_lock, icon = R.drawable.lock_fill0) { onNavigate(AppLockSettings) }
-        FunctionItem(title = R.string.api, icon = R.drawable.code_fill0) { onNavigate(ApiSettings) }
-        FunctionItem(R.string.notifications, icon = R.drawable.notifications_fill0) { onNavigate(Notifications) }
-        FunctionItem(title = R.string.export_logs, icon = R.drawable.description_fill0) {
-            val time = SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(Date(System.currentTimeMillis()))
-            exportLogsLauncher.launch("owndroid_log_$time")
-        }
-        FunctionItem(title = R.string.about, icon = R.drawable.info_fill0) { onNavigate(About) }
     }
 }
 
@@ -177,10 +166,6 @@ fun AppLockSettingsScreen(onNavigateUp: () -> Unit) = MyScaffold(R.string.app_lo
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions { fm.clearFocus() }
         )
-        if(VERSION.SDK_INT >= 28) Row(Modifier.fillMaxWidth().padding(vertical = 6.dp), Arrangement.SpaceBetween, Alignment.CenterVertically) {
-            Text(stringResource(R.string.allow_biometrics))
-            Switch(allowBiometrics, { allowBiometrics = it })
-        }
         Button(
             onClick = {
                 fm.clearFocus()
@@ -281,7 +266,7 @@ fun AboutScreen(onNavigateUp: () -> Unit) {
     MyScaffold(R.string.about, onNavigateUp, 0.dp) {
         Text(text = stringResource(R.string.app_name)+" v$verName ($verCode)", modifier = Modifier.padding(start = 16.dp))
         Spacer(Modifier.padding(vertical = 5.dp))
-        FunctionItem(R.string.project_homepage, "GitHub", R.drawable.open_in_new) { shareLink(context, "https://github.com/BinTianqi/OwnDroid") }
+        FunctionItem(R.string.project_homepage, "GitHub", R.drawable.open_in_new) { shareLink(context, "https://github.com/BinTianqi/DroidLock") }
     }
 }
 

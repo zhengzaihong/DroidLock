@@ -121,9 +121,9 @@
     <string name="activate_device_admin_here">Cihaz Yöneticisini Burada Etkinleştir.</string>
 
     <!--Receiver-->
-    <string name="onEnabled">OwnDroid: Etkin</string>
-    <string name="onDisabled">OwnDroid: Devre Dışı</string>
-    <string name="create_work_profile_success">OwnDroid: İş Profili Başarıyla Oluşturuldu</string>
+    <string name="onEnabled">DroidLock: Etkin</string>
+    <string name="onDisabled">DroidLock: Devre Dışı</string>
+    <string name="create_work_profile_success">DroidLock: İş Profili Başarıyla Oluşturuldu</string>
 
     <!--Dhizuku-->
     <string name="dhizuku" translatable="false">Dhizuku</string>
@@ -672,7 +672,7 @@
     <string name="info_nearby_app_streaming_policy">Uygulama akışı, cihazın bir uygulamayı sanal bir ekranda başlatması ve uygulamanın video akışını yakındaki cihazlara göndermesidir.</string>
     <string name="info_nearby_notification_streaming_policy">Bildirim akışı, önceden yüklenmiş uygulamalardan bildirim verilerini yakındaki cihazlara göndermektir.</string>
     <string name="info_lock_task_packages">Yalnızca görev kilitleme paketleri listesindeki paketler görev kilitleme modunda başlatılabilir.</string>
-    <string name="info_start_lock_task_mode">Görev kilitleme özelliklerinde bildirimlere izin verirseniz, OwnDroid görev kilitleme modu başarıyla başladığında bir bildirim gösterecektir. Bu bildirime tıklayarak görev kilitleme modundan çıkabilirsiniz.</string>
+    <string name="info_start_lock_task_mode">Görev kilitleme özelliklerinde bildirimlere izin verirseniz, DroidLock görev kilitleme modu başarıyla başladığında bir bildirim gösterecektir. Bu bildirime tıklayarak görev kilitleme modundan çıkabilirsiniz.</string>
     <string name="info_security_log">Bir Cihaz Sahibi bu işlevi kullanırsa, tüm kullanıcılar bağlı olmalıdır.</string>
     <string name="info_pre_reboot_security_log">Tüm cihazlar yeniden başlatma öncesi güvenlik günlüklerini desteklemez.</string>
     <string name="info_disable_account_management">Hesap yönetimi bir hesap türü için devre dışı bırakıldığında, o türden bir hesabın eklenmesi veya kaldırılması mümkün olmayacaktır.</string>
@@ -693,7 +693,7 @@
     <string name="info_install_existing_app">Başka bir kullanıcıda yüklenmiş veya kaldırıldıktan sonra saklanmış mevcut bir paketi yükler.</string>
     <!--TODO--><string name="info_enable_system_app">Re-enable a system app that was disabled by default when the user was initialized.</string>
     <string name="info_headless_system_user_mode">Başıboş sistem kullanıcı modu, sistem kullanıcısının sistem servislerini ve bazı sistem kullanıcı arayüzlerini çalıştırdığı, ancak herhangi bir gerçek kişiyle ilişkilendirilmediği ve gerçek kişilerle ilişkilendirilecek ek kullanıcıların oluşturulması gerektiği anlamına gelir.</string>
-    <string name="info_logout">Mevcut kullanıcı OwnDroid tarafından değiştirilmediyse bu işlev kullanılamaz.</string>
+    <string name="info_logout">Mevcut kullanıcı DroidLock tarafından değiştirilmediyse bu işlev kullanılamaz.</string>
     <string name="info_affiliation_id">Cihaz Sahibi bir yönetilen kullanıcı oluşturduğunda, yönetilen kullanıcı bağlı değildir. Yönetilen kullanıcının Cihaz Sahibi ile bağlı hale getirilmesi için ana kullanıcı ve yönetilen kullanıcıda aynı bağlılık kimlikleri ayarlanmalıdır.</string>
     <string name="info_password_complexity">Yok: parola yok\nDüşük: desen, PIN (tekrarlayan veya sıralı dizilerle)\nOrta: PIN (tekrarlayan veya sıralı diziler olmadan, en az 4 uzunluk), alfabetik (en az 4 uzunluk), alfanümerik (en az 4 uzunluk)\nYüksek: PIN (tekrarlayan veya sıralı diziler olmadan, en az 8 uzunluk), alfabetik (en az 6 uzunluk), alfanümerik (en az 6 uzunluk)</string>
     <string name="info_reset_password">Yeni bir kilit ekranı parolası ayarlar. Bu parolanın uzunluğu en az 4 rakam olmalıdır. Parolayı kaldırmak için boş bırakın.\n6 veya daha az uzunlukta sayısal bir parola ayarlarsanız, PIN olarak ayarlanacaktır.</string>

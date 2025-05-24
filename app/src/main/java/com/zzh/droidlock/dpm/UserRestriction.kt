@@ -50,15 +50,15 @@ fun UserRestrictionScreen(onNavigateUp: () -> Unit, onNavigate: (Int, List<Restr
         FunctionItem(R.string.connectivity, icon = R.drawable.devices_other_fill0) {
             onNavigate(R.string.connectivity, RestrictionData.connectivity)
         }
-        FunctionItem(R.string.applications, icon = R.drawable.apps_fill0) {
-            onNavigate(R.string.applications, RestrictionData.applications)
-        }
-        FunctionItem(R.string.users, icon = R.drawable.account_circle_fill0) {
-            onNavigate(R.string.users, RestrictionData.users)
-        }
-        FunctionItem(R.string.media, icon = R.drawable.volume_up_fill0) {
-            onNavigate(R.string.media, RestrictionData.media)
-        }
+//        FunctionItem(R.string.applications, icon = R.drawable.apps_fill0) {
+//            onNavigate(R.string.applications, RestrictionData.applications)
+//        }
+//        FunctionItem(R.string.users, icon = R.drawable.account_circle_fill0) {
+//            onNavigate(R.string.users, RestrictionData.users)
+//        }
+//        FunctionItem(R.string.media, icon = R.drawable.volume_up_fill0) {
+//            onNavigate(R.string.media, RestrictionData.media)
+//        }
         FunctionItem(R.string.other, icon = R.drawable.more_horiz_fill0) {
             onNavigate(R.string.other, RestrictionData.other)
         }
@@ -96,29 +96,29 @@ object RestrictionData {
         Restriction(UserManager.DISALLOW_ULTRA_WIDEBAND_RADIO, R.string.ultra_wideband_radio, R.drawable.wifi_tethering_fill0, 34),
         Restriction(UserManager.DISALLOW_ADD_WIFI_CONFIG, R.string.add_wifi_conf, R.drawable.wifi_fill0, 33),
         Restriction(UserManager.DISALLOW_CHANGE_WIFI_STATE, R.string.change_wifi_state, R.drawable.wifi_fill0, 33),
-        Restriction(UserManager.DISALLOW_WIFI_DIRECT, R.string.wifi_direct, R.drawable.wifi_tethering_fill0),
-        Restriction(UserManager.DISALLOW_WIFI_TETHERING, R.string.wifi_tethering, R.drawable.wifi_tethering_fill0, 33),
-        Restriction(UserManager.DISALLOW_SHARING_ADMIN_CONFIGURED_WIFI, R.string.share_admin_wifi, R.drawable.share_fill0, 33),
-        Restriction(UserManager.DISALLOW_NETWORK_RESET, R.string.network_reset, R.drawable.reset_wrench_fill0, 23),
-        Restriction(UserManager.DISALLOW_CONFIG_TETHERING, R.string.config_tethering, R.drawable.wifi_tethering_fill0),
-        Restriction(UserManager.DISALLOW_CONFIG_VPN, R.string.config_vpn, R.drawable.vpn_key_fill0),
-        Restriction(UserManager.DISALLOW_CONFIG_PRIVATE_DNS, R.string.config_private_dns, R.drawable.dns_fill0, 29),
-        Restriction(UserManager.DISALLOW_AIRPLANE_MODE, R.string.airplane_mode, R.drawable.airplanemode_active_fill0, 28),
-        Restriction(UserManager.DISALLOW_CONFIG_CELL_BROADCASTS, R.string.config_cell_broadcasts, R.drawable.cell_tower_fill0),
-        Restriction(UserManager.DISALLOW_SMS, R.string.sms, R.drawable.sms_fill0),
-        Restriction(UserManager.DISALLOW_OUTGOING_CALLS, R.string.outgoing_calls, R.drawable.phone_forwarded_fill0),
-        Restriction(UserManager.DISALLOW_SIM_GLOBALLY, R.string.download_esim, R.drawable.sim_card_download_fill0)
+//        Restriction(UserManager.DISALLOW_WIFI_DIRECT, R.string.wifi_direct, R.drawable.wifi_tethering_fill0),
+//        Restriction(UserManager.DISALLOW_WIFI_TETHERING, R.string.wifi_tethering, R.drawable.wifi_tethering_fill0, 33),
+//        Restriction(UserManager.DISALLOW_SHARING_ADMIN_CONFIGURED_WIFI, R.string.share_admin_wifi, R.drawable.share_fill0, 33),
+//        Restriction(UserManager.DISALLOW_NETWORK_RESET, R.string.network_reset, R.drawable.reset_wrench_fill0, 23),
+//        Restriction(UserManager.DISALLOW_CONFIG_TETHERING, R.string.config_tethering, R.drawable.wifi_tethering_fill0),
+//        Restriction(UserManager.DISALLOW_CONFIG_VPN, R.string.config_vpn, R.drawable.vpn_key_fill0),
+//        Restriction(UserManager.DISALLOW_CONFIG_PRIVATE_DNS, R.string.config_private_dns, R.drawable.dns_fill0, 29),
+//        Restriction(UserManager.DISALLOW_AIRPLANE_MODE, R.string.airplane_mode, R.drawable.airplanemode_active_fill0, 28),
+//        Restriction(UserManager.DISALLOW_CONFIG_CELL_BROADCASTS, R.string.config_cell_broadcasts, R.drawable.cell_tower_fill0),
+//        Restriction(UserManager.DISALLOW_SMS, R.string.sms, R.drawable.sms_fill0),
+//        Restriction(UserManager.DISALLOW_OUTGOING_CALLS, R.string.outgoing_calls, R.drawable.phone_forwarded_fill0),
+//        Restriction(UserManager.DISALLOW_SIM_GLOBALLY, R.string.download_esim, R.drawable.sim_card_download_fill0)
     )
     val connectivity = listOf(
         Restriction(UserManager.DISALLOW_BLUETOOTH, R.string.bluetooth, R.drawable.bluetooth_fill0, 26),
         Restriction(UserManager.DISALLOW_BLUETOOTH_SHARING, R.string.bt_share, R.drawable.bluetooth_searching_fill0, 26),
         Restriction(UserManager.DISALLOW_SHARE_LOCATION, R.string.share_location, R.drawable.location_on_fill0),
-        Restriction(UserManager.DISALLOW_CONFIG_LOCATION, R.string.config_location, R.drawable.location_on_fill0, 28),
-        Restriction(UserManager.DISALLOW_NEAR_FIELD_COMMUNICATION_RADIO, R.string.nfc, R.drawable.nfc_fill0, 35),
-        Restriction(UserManager.DISALLOW_OUTGOING_BEAM, R.string.outgoing_beam, R.drawable.nfc_fill0, 22),
-        Restriction(UserManager.DISALLOW_USB_FILE_TRANSFER, R.string.usb_file_transfer, R.drawable.usb_fill0),
-        Restriction(UserManager.DISALLOW_MOUNT_PHYSICAL_MEDIA, R.string.mount_physical_media, R.drawable.sd_card_fill0),
-        Restriction(UserManager.DISALLOW_PRINTING, R.string.printing, R.drawable.print_fill0, 28)
+//        Restriction(UserManager.DISALLOW_CONFIG_LOCATION, R.string.config_location, R.drawable.location_on_fill0, 28),
+//        Restriction(UserManager.DISALLOW_NEAR_FIELD_COMMUNICATION_RADIO, R.string.nfc, R.drawable.nfc_fill0, 35),
+//        Restriction(UserManager.DISALLOW_OUTGOING_BEAM, R.string.outgoing_beam, R.drawable.nfc_fill0, 22),
+//        Restriction(UserManager.DISALLOW_USB_FILE_TRANSFER, R.string.usb_file_transfer, R.drawable.usb_fill0),
+//        Restriction(UserManager.DISALLOW_MOUNT_PHYSICAL_MEDIA, R.string.mount_physical_media, R.drawable.sd_card_fill0),
+//        Restriction(UserManager.DISALLOW_PRINTING, R.string.printing, R.drawable.print_fill0, 28)
     )
     val applications = listOf(
         Restriction(UserManager.DISALLOW_INSTALL_APPS, R.string.install_app, R.drawable.android_fill0),
@@ -148,22 +148,22 @@ object RestrictionData {
         Restriction(UserManager.DISALLOW_UNIFIED_PASSWORD, R.string.unified_pwd, R.drawable.work_fill0, 28)
     )
     val other = listOf(
-        Restriction(UserManager.DISALLOW_AUTOFILL, R.string.autofill, R.drawable.password_fill0, 26),
-        Restriction(UserManager.DISALLOW_CONFIG_CREDENTIALS, R.string.config_credentials, R.drawable.android_fill0),
-        Restriction(UserManager.DISALLOW_CONTENT_CAPTURE, R.string.content_capture, R.drawable.screenshot_fill0, 29),
-        Restriction(UserManager.DISALLOW_CONTENT_SUGGESTIONS, R.string.content_suggestions, R.drawable.sms_fill0, 29),
-        Restriction(UserManager.DISALLOW_ASSIST_CONTENT, R.string.assist_content, R.drawable.info_fill0, 35),
-        Restriction(UserManager.DISALLOW_CREATE_WINDOWS, R.string.create_windows, R.drawable.web_asset),
-        Restriction(UserManager.DISALLOW_SET_WALLPAPER, R.string.set_wallpaper, R.drawable.wallpaper_fill0, 24),
-        Restriction(UserManager.DISALLOW_GRANT_ADMIN, R.string.grant_admin, R.drawable.security_fill0, 34),
-        Restriction(UserManager.DISALLOW_FUN, R.string.`fun`, R.drawable.stadia_controller_fill0, 23),
-        Restriction(UserManager.DISALLOW_MODIFY_ACCOUNTS, R.string.modify_accounts, R.drawable.manage_accounts_fill0),
-        Restriction(UserManager.DISALLOW_CONFIG_LOCALE, R.string.config_locale, R.drawable.language_fill0, 28),
-        Restriction(UserManager.DISALLOW_CONFIG_DATE_TIME, R.string.config_date_time, R.drawable.schedule_fill0, 28),
-        Restriction(UserManager.DISALLOW_SYSTEM_ERROR_DIALOGS, R.string.sys_err_dialog, R.drawable.warning_fill0, 28),
+//        Restriction(UserManager.DISALLOW_AUTOFILL, R.string.autofill, R.drawable.password_fill0, 26),
+//        Restriction(UserManager.DISALLOW_CONFIG_CREDENTIALS, R.string.config_credentials, R.drawable.android_fill0),
+//        Restriction(UserManager.DISALLOW_CONTENT_CAPTURE, R.string.content_capture, R.drawable.screenshot_fill0, 29),
+//        Restriction(UserManager.DISALLOW_CONTENT_SUGGESTIONS, R.string.content_suggestions, R.drawable.sms_fill0, 29),
+//        Restriction(UserManager.DISALLOW_ASSIST_CONTENT, R.string.assist_content, R.drawable.info_fill0, 35),
+//        Restriction(UserManager.DISALLOW_CREATE_WINDOWS, R.string.create_windows, R.drawable.web_asset),
+//        Restriction(UserManager.DISALLOW_SET_WALLPAPER, R.string.set_wallpaper, R.drawable.wallpaper_fill0, 24),
+//        Restriction(UserManager.DISALLOW_GRANT_ADMIN, R.string.grant_admin, R.drawable.security_fill0, 34),
+//        Restriction(UserManager.DISALLOW_FUN, R.string.`fun`, R.drawable.stadia_controller_fill0, 23),
+//        Restriction(UserManager.DISALLOW_MODIFY_ACCOUNTS, R.string.modify_accounts, R.drawable.manage_accounts_fill0),
+//        Restriction(UserManager.DISALLOW_CONFIG_LOCALE, R.string.config_locale, R.drawable.language_fill0, 28),
+//        Restriction(UserManager.DISALLOW_CONFIG_DATE_TIME, R.string.config_date_time, R.drawable.schedule_fill0, 28),
+//        Restriction(UserManager.DISALLOW_SYSTEM_ERROR_DIALOGS, R.string.sys_err_dialog, R.drawable.warning_fill0, 28),
         Restriction(UserManager.DISALLOW_FACTORY_RESET, R.string.factory_reset, R.drawable.android_fill0),
         Restriction(UserManager.DISALLOW_SAFE_BOOT, R.string.safe_boot, R.drawable.security_fill0, 23),
-        Restriction(UserManager.DISALLOW_DEBUGGING_FEATURES, R.string.debug_features, R.drawable.adb_fill0)
+//        Restriction(UserManager.DISALLOW_DEBUGGING_FEATURES, R.string.debug_features, R.drawable.adb_fill0)
     )
     fun getAllRestrictions() = internet + connectivity + media + applications + users + other
 }

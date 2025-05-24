@@ -552,7 +552,7 @@ fun setDefaultAffiliationID(context: Context) {
                 val receiver = context.getReceiver()
                 val affiliationIDs = dpm.getAffiliationIds(receiver)
                 if(affiliationIDs.isEmpty()) {
-                    dpm.setAffiliationIds(receiver, setOf("OwnDroid_default_affiliation_id"))
+                    dpm.setAffiliationIds(receiver, setOf("DroidLock_default_affiliation_id"))
                     sp.isDefaultAffiliationIdSet = true
                     Log.d("DPM", "Default affiliation id set")
                 }

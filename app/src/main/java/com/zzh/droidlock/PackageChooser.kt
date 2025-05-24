@@ -62,7 +62,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zzh.droidlock.R
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
-import com.zzh.droidlock.ui.theme.OwnDroidTheme
+import com.zzh.droidlock.ui.theme.DroidLockTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -77,7 +77,7 @@ class PackageChooserActivity: ComponentActivity() {
         val vm by viewModels<MyViewModel>()
         setContent {
             val theme by vm.theme.collectAsStateWithLifecycle()
-            OwnDroidTheme(theme) {
+            DroidLockTheme(theme) {
                 AppChooserScreen(ApplicationsList(false), {
                     setResult(0, Intent().putExtra("package", it))
                     finish()

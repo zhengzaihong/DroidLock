@@ -116,9 +116,9 @@
     <string name="activate_device_admin_here">Активируйте администратора устройства здесь.</string>
 
     <!--Приемник-->
-    <string name="onEnabled">OwnDroid: Включено</string>
-    <string name="onDisabled">OwnDroid: Отключено</string>
-    <string name="create_work_profile_success">OwnDroid: Рабочий профиль успешно создан</string>
+    <string name="onEnabled">DroidLock: Включено</string>
+    <string name="onDisabled">DroidLock: Отключено</string>
+    <string name="create_work_profile_success">DroidLock: Рабочий профиль успешно создан</string>
 
     <!--Dhizuku-->
     <string name="failed_to_init_dhizuku">Не удалось инициализировать Dhizuku</string>
@@ -668,7 +668,7 @@
     <string name="info_nearby_app_streaming_policy">Потоковая передача приложений — это когда устройство запускает приложение на виртуальном дисплее и отправляет видеопоток приложения на ближайшие устройства.</string>
     <string name="info_nearby_notification_streaming_policy">Потоковая передача уведомлений — это отправка данных уведомлений от предустановленных приложений на ближайшие устройства.</string>
     <string name="info_lock_task_packages">Только пакеты, добавленные в список пакетов режима блокировки задач, могут быть запущены в режиме блокировки задач.</string>
-    <string name="info_start_lock_task_mode">Если вы разрешите уведомления для функций режима блокировки задач, OwnDroid покажет уведомление при успешном запуске режима блокировки задач. Вы можете выйти из режима блокировки задач, нажав на это уведомление.</string>
+    <string name="info_start_lock_task_mode">Если вы разрешите уведомления для функций режима блокировки задач, DroidLock покажет уведомление при успешном запуске режима блокировки задач. Вы можете выйти из режима блокировки задач, нажав на это уведомление.</string>
     <string name="info_security_log">Если владелец устройства использует эту функцию, все пользователи должны быть аффилированными.</string>
     <string name="info_pre_reboot_security_log">Не все устройства поддерживают журналы безопасности до перезагрузки.</string>
     <string name="info_disable_account_management">Когда управление учетными записями отключено для определенного типа учетных записей, добавление или удаление учетной записи этого типа будет невозможно.</string>
@@ -689,7 +689,7 @@
     <!--TODO--><string name="info_install_existing_app">Install an existing package that has been installed in another user, or has been kept after uninstall.</string>
     <!--TODO--><string name="info_enable_system_app">Re-enable a system app that was disabled by default when the user was initialized.</string>
     <string name="info_headless_system_user_mode">Режим "безголового" системного пользователя означает, что системный пользователь запускает системные службы и некоторый системный интерфейс, но он не связан с каким-либо реальным человеком, и для связи с реальными людьми должны быть созданы дополнительные пользователи.</string>
-    <string name="info_logout">If the current user is not switched by OwnDroid, this function cannot be used.</string> <!--TODO-->
+    <string name="info_logout">If the current user is not switched by DroidLock, this function cannot be used.</string> <!--TODO-->
     <string name="info_affiliation_id">Когда владелец устройства создает управляемого пользователя, управляемый пользователь не является аффилированным. Чтобы сделать управляемого пользователя аффилированным с владельцем устройства, вам следует установить одинаковые аффилированные идентификаторы в основном и управляемом пользователях.</string>
     <!--TODO--><string name="info_password_complexity">None: no password\nLow: pattern, PIN (with repeating or ordered sequences)\nMedium: PIN (with no repeating or ordered sequences, length at least 4), alphabetic (length at least 4), alphanumeric (length at least 4)\nHigh: PIN (with no repeating or ordered sequences, length at least 8), alphabetic (length at least 6), alphanumeric (length at least 6)</string>
     <string name="info_reset_password">Установить новый пароль блокировки экрана. Длина этого пароля должна быть не менее 4 цифр. Оставьте поле пустым, чтобы удалить пароль.\nЕсли вы установите цифровой пароль длиной 6 символов или меньше, он будет установлен как PIN-код.</string>
