@@ -9,10 +9,12 @@ import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
+import android.net.wifi.WifiManager
 import android.os.Build.VERSION
 import android.os.PersistableBundle
 import android.os.UserHandle
 import android.os.UserManager
+import android.util.Log
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.graphics.drawable.toBitmap
@@ -31,6 +33,7 @@ import java.util.Locale
 class Receiver : DeviceAdminReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
+        Log.d("WifiReceiver",intent.action.toString())
         if(VERSION.SDK_INT >= 26 && intent.action == "com.zzh.droidlock.action.STOP_LOCK_TASK_MODE") {
             val dpm = getManager(context)
             val receiver = ComponentName(context, this::class.java)
