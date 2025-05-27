@@ -444,14 +444,6 @@ fun DeviceOwnerScreen(onNavigateUp: () -> Unit) {
                 Text(text = stringResource(R.string.deactivate))
             }
         }
-        AnimatedVisibility(!deviceOwner) {
-            Column {
-                SelectionContainer{
-                    Text(text = stringResource(R.string.activate_device_owner_command))
-                }
-                CopyTextButton(R.string.copy_command, stringResource(R.string.activate_device_owner_command))
-            }
-        }
     }
     if(deactivateDialog) {
         val sp = SharedPrefs(context)
