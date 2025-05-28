@@ -318,7 +318,7 @@ fun SetupScreen() {
                 statusMessage = "正在禁用调试模式"
                 dpm.addUserRestriction(receiver, UserManager.DISALLOW_DEBUGGING_FEATURES)
                 delay(1000)
-                statusMessage = "禁止系统自动更新"
+                statusMessage = "正在禁止系统自动更新"
                 val policy = SystemUpdatePolicy.createWindowedInstallPolicy(0, 0)
                 dpm.setSystemUpdatePolicy(receiver, policy)
                 statusMessage = "配置成功"
