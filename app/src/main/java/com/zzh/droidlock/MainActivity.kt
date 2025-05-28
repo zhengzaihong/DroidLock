@@ -2,9 +2,11 @@ package com.zzh.droidlock
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.admin.DevicePolicyManager
+import android.app.admin.SystemUpdatePolicy
+import android.os.Build
 import android.os.Build.VERSION
 import android.os.Bundle
+import android.os.UserManager
 import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -12,22 +14,26 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -37,6 +43,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,7 +67,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.zzh.droidlock.R
+import com.rosan.dhizuku.api.Dhizuku
 import com.zzh.droidlock.dpm.Accounts
 import com.zzh.droidlock.dpm.AccountsScreen
 import com.zzh.droidlock.dpm.AddApnSetting
@@ -77,8 +84,6 @@ import com.zzh.droidlock.dpm.AlwaysOnVpnPackage
 import com.zzh.droidlock.dpm.AlwaysOnVpnPackageScreen
 import com.zzh.droidlock.dpm.ApplicationDetails
 import com.zzh.droidlock.dpm.ApplicationDetailsScreen
-import com.zzh.droidlock.dpm.ApplicationsFeatures
-import com.zzh.droidlock.dpm.ApplicationsFeaturesScreen
 import com.zzh.droidlock.dpm.BlockUninstall
 import com.zzh.droidlock.dpm.BlockUninstallScreen
 import com.zzh.droidlock.dpm.CaCert
@@ -95,12 +100,8 @@ import com.zzh.droidlock.dpm.ContentProtectionPolicy
 import com.zzh.droidlock.dpm.ContentProtectionPolicyScreen
 import com.zzh.droidlock.dpm.CreateUser
 import com.zzh.droidlock.dpm.CreateUserScreen
-import com.zzh.droidlock.dpm.CreateWorkProfile
-import com.zzh.droidlock.dpm.CreateWorkProfileScreen
 import com.zzh.droidlock.dpm.CredentialManagerPolicy
 import com.zzh.droidlock.dpm.CredentialManagerPolicyScreen
-import com.zzh.droidlock.dpm.CrossProfileIntentFilter
-import com.zzh.droidlock.dpm.CrossProfileIntentFilterScreen
 import com.zzh.droidlock.dpm.CrossProfilePackages
 import com.zzh.droidlock.dpm.CrossProfilePackagesScreen
 import com.zzh.droidlock.dpm.CrossProfileWidgetProviders
@@ -139,23 +140,21 @@ import com.zzh.droidlock.dpm.Keyguard
 import com.zzh.droidlock.dpm.KeyguardDisabledFeatures
 import com.zzh.droidlock.dpm.KeyguardDisabledFeaturesScreen
 import com.zzh.droidlock.dpm.KeyguardScreen
-import com.zzh.droidlock.dpm.LockScreenInfo
-import com.zzh.droidlock.dpm.LockScreenInfoScreen
 import com.zzh.droidlock.dpm.LockTaskMode
 import com.zzh.droidlock.dpm.LockTaskModeScreen
+import com.zzh.droidlock.dpm.MtePolicy
 import com.zzh.droidlock.dpm.MtePolicyScreen
 import com.zzh.droidlock.dpm.NearbyStreamingPolicy
 import com.zzh.droidlock.dpm.NearbyStreamingPolicyScreen
 import com.zzh.droidlock.dpm.Network
 import com.zzh.droidlock.dpm.NetworkLogging
 import com.zzh.droidlock.dpm.NetworkLoggingScreen
+import com.zzh.droidlock.dpm.NetworkOptions
 import com.zzh.droidlock.dpm.NetworkOptionsScreen
 import com.zzh.droidlock.dpm.NetworkScreen
 import com.zzh.droidlock.dpm.NetworkStatsScreen
 import com.zzh.droidlock.dpm.NetworkStatsViewer
 import com.zzh.droidlock.dpm.NetworkStatsViewerScreen
-import com.zzh.droidlock.dpm.OrganizationOwnedProfile
-import com.zzh.droidlock.dpm.OrganizationOwnedProfileScreen
 import com.zzh.droidlock.dpm.OverrideApn
 import com.zzh.droidlock.dpm.OverrideApnScreen
 import com.zzh.droidlock.dpm.Password
@@ -244,15 +243,13 @@ import com.zzh.droidlock.dpm.isProfileOwner
 import com.zzh.droidlock.dpm.setDefaultAffiliationID
 import com.zzh.droidlock.ui.Animations
 import com.zzh.droidlock.ui.theme.DroidLockTheme
-import com.rosan.dhizuku.api.Dhizuku
-import com.zzh.droidlock.dpm.MtePolicy
-import com.zzh.droidlock.dpm.NetworkOptions
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import org.lsposed.hiddenapibypass.HiddenApiBypass
 import java.util.Locale
+
 
 val backToHomeStateFlow = MutableStateFlow(false)
 @ExperimentalMaterial3Api
@@ -271,7 +268,8 @@ class MainActivity : FragmentActivity() {
         setContent {
             val theme by vm.theme.collectAsStateWithLifecycle()
             DroidLockTheme(theme) {
-                Home(vm)
+//                Home(vm)
+                SetupScreen()
             }
         }
     }
@@ -288,8 +286,73 @@ class MainActivity : FragmentActivity() {
             }
         }
     }
-
 }
+
+
+@Composable
+fun SetupScreen() {
+    var isConfigured by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    val receiver = context.getReceiver()
+    var statusMessage by remember { mutableStateOf("正在配置中...") }
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(Unit) {
+        scope.launch {
+            try {
+                val dpm = context.getDPM()
+                dpm.addUserRestriction(receiver, UserManager.DISALLOW_CONFIG_WIFI)
+                statusMessage = "正在禁用WiFi"
+                delay(1000)
+                if (VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    dpm.addUserRestriction(receiver, UserManager.DISALLOW_BLUETOOTH)
+                    dpm.addUserRestriction(receiver, UserManager.DISALLOW_BLUETOOTH_SHARING)
+                    statusMessage = "正在禁用蓝牙"
+                    delay(1000)
+                }
+                statusMessage = "禁止恢复出厂设置"
+                dpm.addUserRestriction(receiver, UserManager.DISALLOW_FACTORY_RESET)
+                delay(1000)
+                statusMessage = "禁用安全模式"
+                dpm.addUserRestriction(receiver, UserManager.DISALLOW_SAFE_BOOT)
+                delay(1000)
+                statusMessage = "正在禁用调试模式"
+                dpm.addUserRestriction(receiver, UserManager.DISALLOW_DEBUGGING_FEATURES)
+                delay(1000)
+                statusMessage = "禁止系统自动更新"
+                val policy = SystemUpdatePolicy.createWindowedInstallPolicy(0, 0)
+                dpm.setSystemUpdatePolicy(receiver, policy)
+                statusMessage = "配置成功"
+            } catch (e: Exception) {
+                statusMessage = "配置失败: ${e.message}"
+            }finally {
+                isConfigured = true
+            }
+        }
+    }
+
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = colorScheme.background
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally) {
+                if (!isConfigured) {
+                    CircularProgressIndicator()
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+                Text(
+                    text = statusMessage,
+                    style = typography.bodyLarge)
+            }
+        }
+    }
+}
+
+
 
 @ExperimentalMaterial3Api
 @Composable
@@ -523,7 +586,9 @@ private fun HomeScreen(onNavigate: (Any) -> Unit) {
         )
     }
     Scaffold {
-        Column(modifier = Modifier.padding(it).verticalScroll(rememberScrollState())) {
+        Column(modifier = Modifier
+            .padding(it)
+            .verticalScroll(rememberScrollState())) {
             Spacer(Modifier.padding(vertical = 25.dp))
             Text(
                 text = stringResource(R.string.app_name), style = typography.headlineLarge,

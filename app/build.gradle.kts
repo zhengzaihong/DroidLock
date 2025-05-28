@@ -22,7 +22,7 @@ android {
 
     defaultConfig {
         applicationId = "com.zzh.droidlock"
-        minSdk = 21
+        minSdk = 23
         targetSdk = 35
         versionCode = 38
         versionName = "6.6"
