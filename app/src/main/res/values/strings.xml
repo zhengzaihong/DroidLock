@@ -1,6 +1,18 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!--Global-->
-    <string name="app_name" translatable="false">DroidLock</string>
+    <string name="app_name" translatable="false">系统管控</string>
+
+    <string name="app_configuring_ing" translatable="false">Configuring</string>
+    <string name="app_wifi_disabling" translatable="false">Disabling WiFi</string>
+    <string name="app_bluetooth_disabling" translatable="false">Disabling Bluetooth</string>
+    <string name="app_factory_reset_disabling" translatable="false">Restoring factory settings is being disabled</string>
+    <string name="app_security_disabling" translatable="false">Disabling safe mode</string>
+    <string name="app_debugging_disabling" translatable="false">Disabling debug mode</string>
+    <string name="app_auto_update_disabling" translatable="false">Disabling automatic system updates</string>
+    <string name="app_configuring_success" translatable="false">successfully configured</string>
+    <string name="app_configuring_failure" translatable="false">configuration failed</string>
+
+
     <string name="place_holder" translatable="false"/>
     <string name="disabled">Disabled</string>
     <string name="enabled">Enabled</string>

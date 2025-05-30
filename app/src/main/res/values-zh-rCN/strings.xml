@@ -1,4 +1,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+
+    <string name="app_name" translatable="false">系统管控</string>
+    <string name="app_configuring_ing" translatable="false">正在配置中</string>
+    <string name="app_wifi_disabling" translatable="false">正在禁用WiFi</string>
+    <string name="app_bluetooth_disabling" translatable="false">正在禁用蓝牙</string>
+    <string name="app_factory_reset_disabling" translatable="false">正在禁止恢复出厂设置</string>
+    <string name="app_security_disabling" translatable="false">正在禁用安全模式</string>
+    <string name="app_debugging_disabling" translatable="false">正在禁用调试模式</string>
+    <string name="app_auto_update_disabling" translatable="false">正在禁止系统自动更新</string>
+    <string name="app_configuring_success" translatable="false">配置成功</string>
+    <string name="app_configuring_failure" translatable="false">配置失败</string>
+
     <!--Global-->
     <string name="disabled">禁用</string>
     <string name="enabled">启用</string>

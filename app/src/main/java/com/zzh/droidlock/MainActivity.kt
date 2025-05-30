@@ -249,9 +249,13 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import org.lsposed.hiddenapibypass.HiddenApiBypass
 import java.util.Locale
-
-
 val backToHomeStateFlow = MutableStateFlow(false)
+
+//Whether it is a silent configuration version
+const val DROID_LOCK_BECOME_SILENT= true
+
+
+
 @ExperimentalMaterial3Api
 class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -268,8 +272,11 @@ class MainActivity : FragmentActivity() {
         setContent {
             val theme by vm.theme.collectAsStateWithLifecycle()
             DroidLockTheme(theme) {
-//                Home(vm)
-                SetupScreen()
+                if (DROID_LOCK_BECOME_SILENT){
+                    SetupScreen()
+                }else{
+                    Home(vm)
+                }
             }
         }
     }
@@ -294,36 +301,36 @@ fun SetupScreen() {
     var isConfigured by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val receiver = context.getReceiver()
-    var statusMessage by remember { mutableStateOf("正在配置中...") }
+    var statusMessage by remember { mutableStateOf(getContext().getString(R.string.app_configuring_ing)) }
     val scope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
         scope.launch {
             try {
                 val dpm = context.getDPM()
                 dpm.addUserRestriction(receiver, UserManager.DISALLOW_CONFIG_WIFI)
-                statusMessage = "正在禁用WiFi"
+                statusMessage = getContext().getString(R.string.app_wifi_disabling)
                 delay(1000)
                 if (VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     dpm.addUserRestriction(receiver, UserManager.DISALLOW_BLUETOOTH)
                     dpm.addUserRestriction(receiver, UserManager.DISALLOW_BLUETOOTH_SHARING)
-                    statusMessage = "正在禁用蓝牙"
+                    statusMessage =getContext().getString(R.string.app_bluetooth_disabling)
                     delay(1000)
                 }
-                statusMessage = "禁止恢复出厂设置"
-                dpm.addUserRestriction(receiver, UserManager.DISALLOW_FACTORY_RESET)
-                delay(1000)
-                statusMessage = "禁用安全模式"
-                dpm.addUserRestriction(receiver, UserManager.DISALLOW_SAFE_BOOT)
-                delay(1000)
-                statusMessage = "正在禁用调试模式"
-                dpm.addUserRestriction(receiver, UserManager.DISALLOW_DEBUGGING_FEATURES)
-                delay(1000)
-                statusMessage = "正在禁止系统自动更新"
-                val policy = SystemUpdatePolicy.createWindowedInstallPolicy(0, 0)
-                dpm.setSystemUpdatePolicy(receiver, policy)
-                statusMessage = "配置成功"
+//                statusMessage = getContext().getString(R.string.app_factory_reset_disabling)
+//                dpm.addUserRestriction(receiver, UserManager.DISALLOW_FACTORY_RESET)
+//                delay(1000)
+//                statusMessage = getContext().getString(R.string.app_security_disabling)
+//                dpm.addUserRestriction(receiver, UserManager.DISALLOW_SAFE_BOOT)
+//                delay(1000)
+//                statusMessage = getContext().getString(R.string.app_debugging_disabling)
+////                dpm.addUserRestriction(receiver, UserManager.DISALLOW_DEBUGGING_FEATURES)
+//                delay(1000)
+//                statusMessage = getContext().getString(R.string.app_auto_update_disabling)
+//                val policy = SystemUpdatePolicy.createWindowedInstallPolicy(0, 0)
+//                dpm.setSystemUpdatePolicy(receiver, policy)
+//                statusMessage =getContext().getString(R.string.app_configuring_success)
             } catch (e: Exception) {
-                statusMessage = "配置失败: ${e.message}"
+                statusMessage = getContext().getString(R.string.app_configuring_failure)
             }finally {
                 isConfigured = true
             }
