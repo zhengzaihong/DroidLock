@@ -252,6 +252,7 @@ import java.util.Locale
 val backToHomeStateFlow = MutableStateFlow(false)
 
 //Whether it is a silent configuration version
+// 无UI模式
 const val DROID_LOCK_BECOME_SILENT= true
 
 
