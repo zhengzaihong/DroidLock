@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!--Global-->
-    <string name="app_name" translatable="false">系统管控</string>
+    <string name="app_name" translatable="false">System control</string>
 
     <string name="app_configuring_ing" translatable="false">Configuring</string>
     <string name="app_wifi_disabling" translatable="false">Disabling WiFi</string>
@@ -103,9 +103,6 @@
     <string name="add_delegated_admin">Add delegated admin</string>
     <string name="dhizuku_will_be_deactivated">Dhizuku will be deactivated</string>
     <string name="reset_device_policy">Reset device policy</string>
-    <string name="activate_device_admin_command" translatable="false">dpm set-active-admin com.zzh.droidlock/com.zzh.droidlock.Receiver</string>
-    <string name="activate_profile_owner_command" translatable="false">dpm set-profile-owner --user %1$s com.zzh.droidlock/com.zzh.droidlock.Receiver</string>
-    <string name="activate_device_owner_command" translatable="false">dpm set-device-owner com.zzh.droidlock/com.zzh.droidlock.Receiver</string>
     <string name="device_info">Device info</string>
     <string name="support_device_id_attestation">Support Device ID attestation</string>
     <string name="support_unique_device_attestation">Support unique device attestation</string>
@@ -148,7 +145,6 @@
     <string name="list_users">List users</string>
     <string name="list_accounts">List accounts</string>
     <string name="shizuku_not_started">Shizuku not started. </string>
-    <string name="dpm_activate_do_command" translatable="false">dpm set-device-owner com.zzh.droidlock/com.zzh.droidlock.Receiver</string>
     <string name="activate_device_owner">Activate Device owner</string>
     <string name="activate_org_profile">Activate organization-owned work profile</string>
     <string name="accounts">Accounts</string>

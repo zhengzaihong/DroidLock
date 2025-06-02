@@ -54,6 +54,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.FragmentActivity
@@ -70,93 +71,22 @@ import androidx.navigation.toRoute
 import com.rosan.dhizuku.api.Dhizuku
 import com.zzh.droidlock.dpm.Accounts
 import com.zzh.droidlock.dpm.AccountsScreen
-import com.zzh.droidlock.dpm.AddApnSetting
-import com.zzh.droidlock.dpm.AddApnSettingScreen
-import com.zzh.droidlock.dpm.AddDelegatedAdmin
-import com.zzh.droidlock.dpm.AddDelegatedAdminScreen
-import com.zzh.droidlock.dpm.AddNetwork
-import com.zzh.droidlock.dpm.AddNetworkScreen
-import com.zzh.droidlock.dpm.AddPreferentialNetworkServiceConfig
-import com.zzh.droidlock.dpm.AddPreferentialNetworkServiceConfigScreen
-import com.zzh.droidlock.dpm.AffiliationId
-import com.zzh.droidlock.dpm.AffiliationIdScreen
-import com.zzh.droidlock.dpm.AlwaysOnVpnPackage
-import com.zzh.droidlock.dpm.AlwaysOnVpnPackageScreen
-import com.zzh.droidlock.dpm.ApplicationDetails
-import com.zzh.droidlock.dpm.ApplicationDetailsScreen
-import com.zzh.droidlock.dpm.BlockUninstall
-import com.zzh.droidlock.dpm.BlockUninstallScreen
-import com.zzh.droidlock.dpm.CaCert
-import com.zzh.droidlock.dpm.CaCertScreen
-import com.zzh.droidlock.dpm.ChangeTime
-import com.zzh.droidlock.dpm.ChangeTimeScreen
-import com.zzh.droidlock.dpm.ChangeTimeZone
-import com.zzh.droidlock.dpm.ChangeTimeZoneScreen
-import com.zzh.droidlock.dpm.ChangeUsername
-import com.zzh.droidlock.dpm.ChangeUsernameScreen
-import com.zzh.droidlock.dpm.ClearAppStorage
-import com.zzh.droidlock.dpm.ClearAppStorageScreen
-import com.zzh.droidlock.dpm.ContentProtectionPolicy
-import com.zzh.droidlock.dpm.ContentProtectionPolicyScreen
-import com.zzh.droidlock.dpm.CreateUser
-import com.zzh.droidlock.dpm.CreateUserScreen
-import com.zzh.droidlock.dpm.CredentialManagerPolicy
-import com.zzh.droidlock.dpm.CredentialManagerPolicyScreen
-import com.zzh.droidlock.dpm.CrossProfilePackages
-import com.zzh.droidlock.dpm.CrossProfilePackagesScreen
-import com.zzh.droidlock.dpm.CrossProfileWidgetProviders
-import com.zzh.droidlock.dpm.CrossProfileWidgetProvidersScreen
-import com.zzh.droidlock.dpm.DelegatedAdmins
-import com.zzh.droidlock.dpm.DelegatedAdminsScreen
-import com.zzh.droidlock.dpm.DeleteWorkProfile
-import com.zzh.droidlock.dpm.DeleteWorkProfileScreen
 import com.zzh.droidlock.dpm.DeviceAdmin
 import com.zzh.droidlock.dpm.DeviceAdminScreen
 import com.zzh.droidlock.dpm.DeviceInfo
 import com.zzh.droidlock.dpm.DeviceInfoScreen
 import com.zzh.droidlock.dpm.DeviceOwner
 import com.zzh.droidlock.dpm.DeviceOwnerScreen
-import com.zzh.droidlock.dpm.DisableAccountManagement
-import com.zzh.droidlock.dpm.DisableAccountManagementScreen
-import com.zzh.droidlock.dpm.DisableMeteredData
-import com.zzh.droidlock.dpm.DisableMeteredDataScreen
-import com.zzh.droidlock.dpm.DisableUserControl
-import com.zzh.droidlock.dpm.DisableUserControlScreen
-import com.zzh.droidlock.dpm.EnableSystemApp
-import com.zzh.droidlock.dpm.EnableSystemAppScreen
-import com.zzh.droidlock.dpm.FrpPolicy
-import com.zzh.droidlock.dpm.FrpPolicyScreen
-import com.zzh.droidlock.dpm.HardwareMonitor
-import com.zzh.droidlock.dpm.HardwareMonitorScreen
-import com.zzh.droidlock.dpm.Hide
-import com.zzh.droidlock.dpm.HideScreen
-import com.zzh.droidlock.dpm.InstallExistingApp
-import com.zzh.droidlock.dpm.InstallExistingAppScreen
-import com.zzh.droidlock.dpm.InstallSystemUpdate
-import com.zzh.droidlock.dpm.InstallSystemUpdateScreen
-import com.zzh.droidlock.dpm.KeepUninstalledPackages
-import com.zzh.droidlock.dpm.KeepUninstalledPackagesScreen
 import com.zzh.droidlock.dpm.Keyguard
 import com.zzh.droidlock.dpm.KeyguardDisabledFeatures
 import com.zzh.droidlock.dpm.KeyguardDisabledFeaturesScreen
 import com.zzh.droidlock.dpm.KeyguardScreen
-import com.zzh.droidlock.dpm.LockTaskMode
-import com.zzh.droidlock.dpm.LockTaskModeScreen
-import com.zzh.droidlock.dpm.MtePolicy
-import com.zzh.droidlock.dpm.MtePolicyScreen
-import com.zzh.droidlock.dpm.NearbyStreamingPolicy
-import com.zzh.droidlock.dpm.NearbyStreamingPolicyScreen
 import com.zzh.droidlock.dpm.Network
-import com.zzh.droidlock.dpm.NetworkLogging
-import com.zzh.droidlock.dpm.NetworkLoggingScreen
 import com.zzh.droidlock.dpm.NetworkOptions
 import com.zzh.droidlock.dpm.NetworkOptionsScreen
 import com.zzh.droidlock.dpm.NetworkScreen
-import com.zzh.droidlock.dpm.NetworkStatsScreen
 import com.zzh.droidlock.dpm.NetworkStatsViewer
 import com.zzh.droidlock.dpm.NetworkStatsViewerScreen
-import com.zzh.droidlock.dpm.OverrideApn
-import com.zzh.droidlock.dpm.OverrideApnScreen
 import com.zzh.droidlock.dpm.Password
 import com.zzh.droidlock.dpm.PasswordInfo
 import com.zzh.droidlock.dpm.PasswordInfoScreen
@@ -164,22 +94,7 @@ import com.zzh.droidlock.dpm.PasswordScreen
 import com.zzh.droidlock.dpm.PermissionPolicy
 import com.zzh.droidlock.dpm.PermissionPolicyScreen
 import com.zzh.droidlock.dpm.Permissions
-import com.zzh.droidlock.dpm.PermissionsManager
-import com.zzh.droidlock.dpm.PermissionsManagerScreen
 import com.zzh.droidlock.dpm.PermissionsScreen
-import com.zzh.droidlock.dpm.PermittedAccessibilityServices
-import com.zzh.droidlock.dpm.PermittedAccessibilityServicesScreen
-import com.zzh.droidlock.dpm.PermittedInputMethods
-import com.zzh.droidlock.dpm.PermittedInputMethodsScreen
-import com.zzh.droidlock.dpm.PreferentialNetworkService
-import com.zzh.droidlock.dpm.PreferentialNetworkServiceScreen
-import com.zzh.droidlock.dpm.PrivateDns
-import com.zzh.droidlock.dpm.PrivateDnsScreen
-import com.zzh.droidlock.dpm.ProfileOwner
-import com.zzh.droidlock.dpm.ProfileOwnerScreen
-import com.zzh.droidlock.dpm.QueryNetworkStats
-import com.zzh.droidlock.dpm.RecommendedGlobalProxy
-import com.zzh.droidlock.dpm.RecommendedGlobalProxyScreen
 import com.zzh.droidlock.dpm.RequiredPasswordComplexity
 import com.zzh.droidlock.dpm.RequiredPasswordComplexityScreen
 import com.zzh.droidlock.dpm.RequiredPasswordQuality
@@ -189,55 +104,24 @@ import com.zzh.droidlock.dpm.ResetPasswordScreen
 import com.zzh.droidlock.dpm.ResetPasswordToken
 import com.zzh.droidlock.dpm.ResetPasswordTokenScreen
 import com.zzh.droidlock.dpm.Restriction
-import com.zzh.droidlock.dpm.SecurityLogging
-import com.zzh.droidlock.dpm.SecurityLoggingScreen
-import com.zzh.droidlock.dpm.SetDefaultDialer
-import com.zzh.droidlock.dpm.SetDefaultDialerScreen
-import com.zzh.droidlock.dpm.SetSystemUpdatePolicy
-import com.zzh.droidlock.dpm.ShizukuScreen
-import com.zzh.droidlock.dpm.SupportMessage
-import com.zzh.droidlock.dpm.SupportMessageScreen
-import com.zzh.droidlock.dpm.Suspend
-import com.zzh.droidlock.dpm.SuspendPersonalApp
-import com.zzh.droidlock.dpm.SuspendPersonalAppScreen
-import com.zzh.droidlock.dpm.SuspendScreen
 import com.zzh.droidlock.dpm.SystemManager
 import com.zzh.droidlock.dpm.SystemManagerScreen
 import com.zzh.droidlock.dpm.SystemOptions
 import com.zzh.droidlock.dpm.SystemOptionsScreen
-import com.zzh.droidlock.dpm.SystemUpdatePolicyScreen
-import com.zzh.droidlock.dpm.TransferOwnership
-import com.zzh.droidlock.dpm.TransferOwnershipScreen
-import com.zzh.droidlock.dpm.UninstallApp
-import com.zzh.droidlock.dpm.UninstallAppScreen
-import com.zzh.droidlock.dpm.UserInfo
-import com.zzh.droidlock.dpm.UserInfoScreen
 import com.zzh.droidlock.dpm.UserOperation
 import com.zzh.droidlock.dpm.UserOperationScreen
 import com.zzh.droidlock.dpm.UserRestriction
 import com.zzh.droidlock.dpm.UserRestrictionOptions
 import com.zzh.droidlock.dpm.UserRestrictionOptionsScreen
 import com.zzh.droidlock.dpm.UserRestrictionScreen
-import com.zzh.droidlock.dpm.UserSessionMessage
-import com.zzh.droidlock.dpm.UserSessionMessageScreen
 import com.zzh.droidlock.dpm.Users
 import com.zzh.droidlock.dpm.UsersOptions
 import com.zzh.droidlock.dpm.UsersOptionsScreen
 import com.zzh.droidlock.dpm.UsersScreen
-import com.zzh.droidlock.dpm.WiFi
-import com.zzh.droidlock.dpm.WifiAuthKeypair
-import com.zzh.droidlock.dpm.WifiAuthKeypairScreen
-import com.zzh.droidlock.dpm.WifiScreen
-import com.zzh.droidlock.dpm.WifiSecurityLevel
-import com.zzh.droidlock.dpm.WifiSecurityLevelScreen
-import com.zzh.droidlock.dpm.WifiSsidPolicyScreen
-import com.zzh.droidlock.dpm.WipeData
-import com.zzh.droidlock.dpm.WipeDataScreen
 import com.zzh.droidlock.dpm.dhizukuErrorStatus
 import com.zzh.droidlock.dpm.dhizukuPermissionGranted
 import com.zzh.droidlock.dpm.getDPM
 import com.zzh.droidlock.dpm.getReceiver
-import com.zzh.droidlock.dpm.isDeviceAdmin
 import com.zzh.droidlock.dpm.isDeviceOwner
 import com.zzh.droidlock.dpm.isProfileOwner
 import com.zzh.droidlock.dpm.setDefaultAffiliationID
@@ -249,11 +133,11 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import org.lsposed.hiddenapibypass.HiddenApiBypass
 import java.util.Locale
+
 val backToHomeStateFlow = MutableStateFlow(false)
 
-//Whether it is a silent configuration version
-// 无UI模式
-const val DROID_LOCK_BECOME_SILENT= true
+// UI-Model
+const val DROID_LOCK_UI_STATUS= true
 
 
 
@@ -273,10 +157,10 @@ class MainActivity : FragmentActivity() {
         setContent {
             val theme by vm.theme.collectAsStateWithLifecycle()
             DroidLockTheme(theme) {
-                if (DROID_LOCK_BECOME_SILENT){
-                    SetupScreen()
-                }else{
+                if (DROID_LOCK_UI_STATUS){
                     Home(vm)
+                }else{
+                    SetupScreen()
                 }
             }
         }
@@ -317,19 +201,17 @@ fun SetupScreen() {
                     statusMessage =getContext().getString(R.string.app_bluetooth_disabling)
                     delay(1000)
                 }
-//                statusMessage = getContext().getString(R.string.app_factory_reset_disabling)
-//                dpm.addUserRestriction(receiver, UserManager.DISALLOW_FACTORY_RESET)
-//                delay(1000)
-//                statusMessage = getContext().getString(R.string.app_security_disabling)
-//                dpm.addUserRestriction(receiver, UserManager.DISALLOW_SAFE_BOOT)
-//                delay(1000)
-//                statusMessage = getContext().getString(R.string.app_debugging_disabling)
-////                dpm.addUserRestriction(receiver, UserManager.DISALLOW_DEBUGGING_FEATURES)
-//                delay(1000)
-//                statusMessage = getContext().getString(R.string.app_auto_update_disabling)
-//                val policy = SystemUpdatePolicy.createWindowedInstallPolicy(0, 0)
-//                dpm.setSystemUpdatePolicy(receiver, policy)
-//                statusMessage =getContext().getString(R.string.app_configuring_success)
+                statusMessage = getContext().getString(R.string.app_factory_reset_disabling)
+                dpm.addUserRestriction(receiver, UserManager.DISALLOW_FACTORY_RESET)
+                delay(1000)
+                statusMessage = getContext().getString(R.string.app_security_disabling)
+                dpm.addUserRestriction(receiver, UserManager.DISALLOW_SAFE_BOOT)
+                delay(1000)
+
+                statusMessage = getContext().getString(R.string.app_auto_update_disabling)
+                val policy = SystemUpdatePolicy.createWindowedInstallPolicy(0, 0)
+                dpm.setSystemUpdatePolicy(receiver, policy)
+                statusMessage =getContext().getString(R.string.app_configuring_success)
             } catch (e: Exception) {
                 statusMessage = getContext().getString(R.string.app_configuring_failure)
             }finally {
@@ -354,12 +236,11 @@ fun SetupScreen() {
                 }
                 Text(
                     text = statusMessage,
-                    style = typography.bodyLarge)
+                    fontSize = 70.sp)
             }
         }
     }
 }
-
 
 
 @ExperimentalMaterial3Api
@@ -393,104 +274,22 @@ fun Home(vm: MyViewModel) {
         composable<Home> { HomeScreen { navController.navigate(it) } }
 
         composable<Permissions> {
-            PermissionsScreen(::navigateUp, { navController.navigate(it) }) { navController.navigate(ShizukuScreen, it) }
+            PermissionsScreen(::navigateUp, { navController.navigate(it) })
         }
-        composable<ShizukuScreen> { ShizukuScreen(it.arguments!!, ::navigateUp) { navController.navigate(it) } }
         composable<Accounts>(mapOf(serializableNavTypePair<List<Accounts.Account>>())) { AccountsScreen(it.toRoute(), ::navigateUp) }
         composable<DeviceAdmin> { DeviceAdminScreen(::navigateUp) }
-        composable<ProfileOwner> { ProfileOwnerScreen(::navigateUp) }
         composable<DeviceOwner> { DeviceOwnerScreen(::navigateUp) }
-        composable<DelegatedAdmins> { DelegatedAdminsScreen(::navigateUp, ::navigate) }
-        composable<AddDelegatedAdmin>{ AddDelegatedAdminScreen(it.toRoute(), ::navigateUp) }
         composable<DeviceInfo> { DeviceInfoScreen(::navigateUp) }
-//        composable<LockScreenInfo> { LockScreenInfoScreen(::navigateUp) }
-        composable<SupportMessage> { SupportMessageScreen(::navigateUp) }
-        composable<TransferOwnership> { TransferOwnershipScreen(::navigateUp) }
-
         composable<SystemManager> { SystemManagerScreen(::navigateUp, ::navigate) }
         composable<SystemOptions> { SystemOptionsScreen(::navigateUp) }
         composable<Keyguard> { KeyguardScreen(::navigateUp) }
-        composable<HardwareMonitor> { HardwareMonitorScreen(::navigateUp) }
-        composable<ChangeTime> { ChangeTimeScreen(::navigateUp) }
-        composable<ChangeTimeZone> { ChangeTimeZoneScreen(::navigateUp) }
-        //composable<> { KeyPairs(::navigateUp) }
-        composable<ContentProtectionPolicy> { ContentProtectionPolicyScreen(::navigateUp) }
         composable<PermissionPolicy> { PermissionPolicyScreen(::navigateUp) }
-        composable<MtePolicy> { MtePolicyScreen(::navigateUp) }
-        composable<NearbyStreamingPolicy> { NearbyStreamingPolicyScreen(::navigateUp) }
-        composable<LockTaskMode> { LockTaskModeScreen(::navigateUp) }
-        composable<CaCert> { CaCertScreen(::navigateUp) }
-        composable<SecurityLogging> { SecurityLoggingScreen(::navigateUp) }
-        composable<DisableAccountManagement> { DisableAccountManagementScreen(::navigateUp) }
-        composable<SetSystemUpdatePolicy> { SystemUpdatePolicyScreen(::navigateUp) }
-        composable<InstallSystemUpdate> { InstallSystemUpdateScreen(::navigateUp) }
-        composable<FrpPolicy> { FrpPolicyScreen(::navigateUp) }
-        composable<WipeData> { WipeDataScreen(::navigateUp) }
 
         composable<Network> { NetworkScreen(::navigateUp, ::navigate) }
-        composable<WiFi> { WifiScreen(::navigateUp, { navController.navigate(it) }) { navController.navigate(AddNetwork, it)} }
         composable<NetworkOptions> { NetworkOptionsScreen(::navigateUp) }
-        composable<AddNetwork> { AddNetworkScreen(it.arguments!!, ::navigateUp) }
-        composable<WifiSecurityLevel> { WifiSecurityLevelScreen(::navigateUp) }
-        composable<WifiSsidPolicyScreen> { WifiSsidPolicyScreen(::navigateUp) }
-        composable<QueryNetworkStats> { NetworkStatsScreen(::navigateUp, ::navigate) }
         composable<NetworkStatsViewer>(mapOf(serializableNavTypePair<List<NetworkStatsViewer.Data>>())) {
             NetworkStatsViewerScreen(it.toRoute()) { navController.navigateUp() }
         }
-        composable<PrivateDns> { PrivateDnsScreen(::navigateUp) }
-        composable<AlwaysOnVpnPackage> { AlwaysOnVpnPackageScreen(::navigateUp) }
-        composable<RecommendedGlobalProxy> { RecommendedGlobalProxyScreen(::navigateUp) }
-        composable<NetworkLogging> { NetworkLoggingScreen(::navigateUp) }
-        composable<WifiAuthKeypair> { WifiAuthKeypairScreen(::navigateUp) }
-        composable<PreferentialNetworkService> { PreferentialNetworkServiceScreen(::navigateUp, ::navigate) }
-        composable<AddPreferentialNetworkServiceConfig> { AddPreferentialNetworkServiceConfigScreen(it.toRoute(), ::navigateUp) }
-        composable<OverrideApn> { OverrideApnScreen(::navigateUp) { navController.navigate(AddApnSetting, it) } }
-        composable<AddApnSetting> { AddApnSettingScreen(it.arguments?.getParcelable("setting"), ::navigateUp) }
-
-//        composable<WorkProfile> { WorkProfileScreen(::navigateUp, ::navigate) }
-//        composable<OrganizationOwnedProfile> { OrganizationOwnedProfileScreen(::navigateUp) }
-//        composable<CreateWorkProfile> { CreateWorkProfileScreen(::navigateUp) }
-        composable<SuspendPersonalApp> { SuspendPersonalAppScreen(::navigateUp) }
-//        composable<CrossProfileIntentFilter> { CrossProfileIntentFilterScreen(::navigateUp) }
-        composable<DeleteWorkProfile> { DeleteWorkProfileScreen(::navigateUp) }
-
-//        composable<ApplicationsList> {
-//            AppChooserScreen(it.toRoute(), {
-//                if(it == null) navigateUp() else navigate(ApplicationDetails(it))
-//            }, {
-//                SharedPrefs(context).applicationsListView = false
-//                navController.navigate(ApplicationsFeatures) {
-//                    popUpTo(Home)
-//                }
-//            })
-//        }
-//        composable<ApplicationsFeatures> {
-//            ApplicationsFeaturesScreen(::navigateUp, ::navigate) {
-//                SharedPrefs(context).applicationsListView = true
-//                navController.navigate(ApplicationsList(true)) {
-//                    popUpTo(Home)
-//                }
-//            }
-//        }
-        composable<ApplicationDetails> { ApplicationDetailsScreen(it.toRoute(), ::navigateUp, ::navigate) }
-        composable<Suspend> { SuspendScreen(::navigateUp) }
-        composable<Hide> { HideScreen(::navigateUp) }
-        composable<BlockUninstall> { BlockUninstallScreen(::navigateUp) }
-        composable<DisableUserControl> { DisableUserControlScreen(::navigateUp) }
-        composable<PermissionsManager> { PermissionsManagerScreen(::navigateUp, it.toRoute()) }
-        composable<DisableMeteredData> { DisableMeteredDataScreen(::navigateUp) }
-        composable<ClearAppStorage> { ClearAppStorageScreen(::navigateUp) }
-        composable<UninstallApp> { UninstallAppScreen(::navigateUp) }
-        composable<KeepUninstalledPackages> { KeepUninstalledPackagesScreen(::navigateUp) }
-        composable<InstallExistingApp> { InstallExistingAppScreen(::navigateUp) }
-        composable<CrossProfilePackages> { CrossProfilePackagesScreen(::navigateUp) }
-        composable<CrossProfileWidgetProviders> { CrossProfileWidgetProvidersScreen(::navigateUp) }
-        composable<CredentialManagerPolicy> { CredentialManagerPolicyScreen(::navigateUp) }
-        composable<PermittedAccessibilityServices> { PermittedAccessibilityServicesScreen(::navigateUp) }
-        composable<PermittedInputMethods> { PermittedInputMethodsScreen(::navigateUp) }
-        composable<EnableSystemApp> { EnableSystemAppScreen(::navigateUp) }
-        composable<SetDefaultDialer> { SetDefaultDialerScreen(::navigateUp) }
-
         composable<UserRestriction> {
             LaunchedEffect(Unit) {
                 vm.userRestrictions.value = context.getDPM().getUserRestrictions(receiver)
@@ -514,14 +313,8 @@ fun Home(vm: MyViewModel) {
         }
 
         composable<Users> { UsersScreen(::navigateUp, ::navigate) }
-        composable<UserInfo> { UserInfoScreen(::navigateUp) }
         composable<UsersOptions> { UsersOptionsScreen(::navigateUp) }
         composable<UserOperation> { UserOperationScreen(::navigateUp) }
-        composable<CreateUser> { CreateUserScreen(::navigateUp) }
-        composable<ChangeUsername> { ChangeUsernameScreen(::navigateUp) }
-        composable<UserSessionMessage> { UserSessionMessageScreen(::navigateUp) }
-        composable<AffiliationId> { AffiliationIdScreen(::navigateUp) }
-
         composable<Password> { PasswordScreen(::navigateUp, ::navigate) }
         composable<PasswordInfo> { PasswordInfoScreen(::navigateUp) }
         composable<ResetPasswordToken> { ResetPasswordTokenScreen(::navigateUp) }
@@ -537,9 +330,6 @@ fun Home(vm: MyViewModel) {
             AppearanceScreen(::navigateUp, theme) { vm.theme.value = it }
         }
         composable<AppLockSettings> { AppLockSettingsScreen(::navigateUp) }
-//        composable<ApiSettings> { ApiSettings(::navigateUp) }
-//        composable<Notifications> { NotificationsScreen(::navigateUp) }
-//        composable<About> { AboutScreen(::navigateUp) }
 
         dialog<AppLock>(dialogProperties = DialogProperties(false, false)) {
             AppLockDialog(::navigateUp) { (context as? Activity)?.moveTaskToBack(true) }
@@ -577,21 +367,11 @@ private fun HomeScreen(onNavigate: (Any) -> Unit) {
     val dpm = context.getDPM()
     val receiver = context.getReceiver()
     var activated by remember { mutableStateOf(false) }
-    var activateType by remember { mutableStateOf("") }
-    val deviceAdmin = context.isDeviceAdmin
     val deviceOwner = context.isDeviceOwner
     val profileOwner = context.isProfileOwner
     val refreshStatus by dhizukuErrorStatus.collectAsState()
     LaunchedEffect(refreshStatus) {
         activated = context.isProfileOwner || context.isDeviceOwner
-        activateType = if(SharedPrefs(context).dhizuku) context.getString(R.string.dhizuku) + " - " else ""
-        activateType += context.getString(
-            if(deviceOwner) { R.string.device_owner }
-            else if(profileOwner) {
-                if(VERSION.SDK_INT >= 24 && dpm.isManagedProfile(receiver)) R.string.work_profile_owner else R.string.profile_owner
-            }
-            else if(deviceAdmin) R.string.device_admin else R.string.click_to_activate
-        )
     }
     Scaffold {
         Column(modifier = Modifier
@@ -624,27 +404,11 @@ private fun HomeScreen(onNavigate: (Any) -> Unit) {
                         color = colorScheme.onPrimary,
                         modifier = Modifier.padding(bottom = 2.dp)
                     )
-                    if(activateType != "") { Text(text = activateType, color = colorScheme.onPrimary) }
                 }
             }
-//            HomePageItem(R.string.system, R.drawable.android_fill0) { onNavigate(SystemManager) }
-
-//            if(deviceOwner || profileOwner) { HomePageItem(R.string.network, R.drawable.wifi_fill0) { onNavigate(Network) } }
-//            if(
-//                (VERSION.SDK_INT < 24 && !deviceOwner) || (dpm.isProvisioningAllowed(DevicePolicyManager.ACTION_PROVISION_MANAGED_PROFILE) ||
-//                                (profileOwner && dpm.isManagedProfile(receiver))
-//                        )
-//            ) {
-//                HomePageItem(R.string.work_profile, R.drawable.work_fill0) { onNavigate(WorkProfile) }
-//            }
-//            if(deviceOwner || profileOwner) HomePageItem(R.string.applications, R.drawable.apps_fill0) {
-//                onNavigate(if(SharedPrefs(context).applicationsListView) ApplicationsList(true) else ApplicationsFeatures)
-//            }
             if(VERSION.SDK_INT >= 24 && (profileOwner || deviceOwner)) {
                 HomePageItem(R.string.user_restriction, R.drawable.person_off) { onNavigate(UserRestriction) }
             }
-//            HomePageItem(R.string.users,R.drawable.manage_accounts_fill0) { onNavigate(Users) }
-//            if(deviceOwner || profileOwner) HomePageItem(R.string.password_and_keyguard, R.drawable.password_fill0) { onNavigate(Password) }
             HomePageItem(R.string.settings, R.drawable.settings_fill0) { onNavigate(Settings) }
             Spacer(Modifier.padding(vertical = 20.dp))
         }

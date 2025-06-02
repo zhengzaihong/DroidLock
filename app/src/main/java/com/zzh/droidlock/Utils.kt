@@ -126,22 +126,7 @@ inline fun <reified T> serializableNavTypePair() =
         Json.encodeToString(value)
 }
 
-class ChoosePackageContract: ActivityResultContract<Nothing?, String?>() {
-    override fun createIntent(context: Context, input: Nothing?): Intent =
-        Intent(context, PackageChooserActivity::class.java)
-    override fun parseResult(resultCode: Int, intent: Intent?): String? =
-        intent?.getStringExtra("package")
-}
 
-fun exportLogs(context: Context, uri: Uri) {
-    context.contentResolver.openOutputStream(uri)?.use { output ->
-        val proc = Runtime.getRuntime().exec("logcat -d")
-        proc.inputStream.copyTo(output)
-        if(Build.VERSION.SDK_INT >= 26) proc.waitFor(2L, TimeUnit.SECONDS)
-        else proc.waitFor()
-        context.showOperationResultToast(proc.exitValue() == 0)
-    }
-}
 
 fun <T> NavHostController.navigate(route: T, args: Bundle) {
     navigate(graph.findNode(route)!!.id, args)

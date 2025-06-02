@@ -82,10 +82,10 @@
 
     <!--Permissions-->
     <string name="click_to_activate">点击以激活</string>
-    <string name="device_admin">Device admin</string>
+    <string name="device_admin">设备管理者</string>
     <string name="activate_jump" tools:ignore="TypographyEllipsis">激活...</string>
-    <string name="profile_owner">Profile owner</string>
-    <string name="device_owner">Device owner</string>
+    <string name="profile_owner">文件配置者</string>
+    <string name="device_owner">设备所有者</string>
     <string name="delegated_admins">委托管理员</string>
     <string name="delegated_scope">委托作用域</string>
     <string name="manage_application_restrictions">管理应用限制</string>
@@ -124,8 +124,8 @@
     <string name="activate_device_admin_here">在这里激活Device admin</string>
 
     <!--Receiver-->
-    <string name="onEnabled">DroidLock：已启用</string>
-    <string name="onDisabled">DroidLock：已禁用</string>
+    <string name="onEnabled">系统管控：已启用</string>
+    <string name="onDisabled">系统管控：已禁用</string>
     <string name="create_work_profile_success">DroidLock：创建工作资料成功</string>
 
     <!--Dhizuku-->

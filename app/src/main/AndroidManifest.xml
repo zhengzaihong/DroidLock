@@ -48,25 +48,6 @@
             android:theme="@style/Theme.Transparent">
         </activity>
         <activity
-            android:name=".AppInstallerActivity"
-            android:label="@string/app_installer"
-            android:exported="true"
-            android:excludeFromRecents="true"
-            android:launchMode="singleInstance">
-            <intent-filter>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <action android:name="android.intent.action.VIEW"/>
-                <action android:name="android.intent.action.SEND"/>
-                <action android:name="android.intent.action.SEND_MULTIPLE"/>
-                <data android:mimeType="application/vnd.android.package-archive"/>
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".PackageChooserActivity"
-            android:label="@string/package_chooser"
-            android:exported="false"
-            android:launchMode="singleInstance"/>
-        <activity
             android:name=".ShortcutsReceiverActivity"
             android:permission="com.zzh.droidLock.MyPermission"
             android:exported="true"
