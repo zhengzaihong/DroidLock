@@ -3,6 +3,10 @@ package com.zzh.droidlock
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.admin.SystemUpdatePolicy
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Build
 import android.os.Build.VERSION
 import android.os.Bundle
@@ -41,6 +45,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -69,30 +74,16 @@ import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.rosan.dhizuku.api.Dhizuku
-import com.zzh.droidlock.dpm.Accounts
-import com.zzh.droidlock.dpm.AccountsScreen
 import com.zzh.droidlock.dpm.DeviceAdmin
 import com.zzh.droidlock.dpm.DeviceAdminScreen
-import com.zzh.droidlock.dpm.DeviceInfo
-import com.zzh.droidlock.dpm.DeviceInfoScreen
 import com.zzh.droidlock.dpm.DeviceOwner
 import com.zzh.droidlock.dpm.DeviceOwnerScreen
-import com.zzh.droidlock.dpm.Keyguard
 import com.zzh.droidlock.dpm.KeyguardDisabledFeatures
 import com.zzh.droidlock.dpm.KeyguardDisabledFeaturesScreen
-import com.zzh.droidlock.dpm.KeyguardScreen
-import com.zzh.droidlock.dpm.Network
-import com.zzh.droidlock.dpm.NetworkOptions
-import com.zzh.droidlock.dpm.NetworkOptionsScreen
-import com.zzh.droidlock.dpm.NetworkScreen
-import com.zzh.droidlock.dpm.NetworkStatsViewer
-import com.zzh.droidlock.dpm.NetworkStatsViewerScreen
 import com.zzh.droidlock.dpm.Password
 import com.zzh.droidlock.dpm.PasswordInfo
 import com.zzh.droidlock.dpm.PasswordInfoScreen
 import com.zzh.droidlock.dpm.PasswordScreen
-import com.zzh.droidlock.dpm.PermissionPolicy
-import com.zzh.droidlock.dpm.PermissionPolicyScreen
 import com.zzh.droidlock.dpm.Permissions
 import com.zzh.droidlock.dpm.PermissionsScreen
 import com.zzh.droidlock.dpm.RequiredPasswordComplexity
@@ -104,22 +95,13 @@ import com.zzh.droidlock.dpm.ResetPasswordScreen
 import com.zzh.droidlock.dpm.ResetPasswordToken
 import com.zzh.droidlock.dpm.ResetPasswordTokenScreen
 import com.zzh.droidlock.dpm.Restriction
-import com.zzh.droidlock.dpm.SystemManager
-import com.zzh.droidlock.dpm.SystemManagerScreen
-import com.zzh.droidlock.dpm.SystemOptions
-import com.zzh.droidlock.dpm.SystemOptionsScreen
-import com.zzh.droidlock.dpm.UserOperation
-import com.zzh.droidlock.dpm.UserOperationScreen
 import com.zzh.droidlock.dpm.UserRestriction
 import com.zzh.droidlock.dpm.UserRestrictionOptions
 import com.zzh.droidlock.dpm.UserRestrictionOptionsScreen
 import com.zzh.droidlock.dpm.UserRestrictionScreen
-import com.zzh.droidlock.dpm.Users
-import com.zzh.droidlock.dpm.UsersOptions
-import com.zzh.droidlock.dpm.UsersOptionsScreen
-import com.zzh.droidlock.dpm.UsersScreen
 import com.zzh.droidlock.dpm.dhizukuErrorStatus
 import com.zzh.droidlock.dpm.dhizukuPermissionGranted
+import com.zzh.droidlock.dpm.dpcPackageName
 import com.zzh.droidlock.dpm.getDPM
 import com.zzh.droidlock.dpm.getReceiver
 import com.zzh.droidlock.dpm.isDeviceOwner
@@ -133,16 +115,19 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import org.lsposed.hiddenapibypass.HiddenApiBypass
 import java.util.Locale
+import kotlin.concurrent.thread
+
 
 val backToHomeStateFlow = MutableStateFlow(false)
 
 // UI-Model
-const val DROID_LOCK_UI_STATUS= true
+const val DROID_LOCK_UI_STATUS = true
 
 
 
 @ExperimentalMaterial3Api
 class MainActivity : FragmentActivity() {
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     override fun onCreate(savedInstanceState: Bundle?) {
         registerActivityResult(this)
         enableEdgeToEdge()
@@ -157,15 +142,31 @@ class MainActivity : FragmentActivity() {
         setContent {
             val theme by vm.theme.collectAsStateWithLifecycle()
             DroidLockTheme(theme) {
+                // 收到解除-重组
+                val changeUI = remember { mutableStateOf(false) }
+                LaunchedEffect(Unit) {
+                    val filter = IntentFilter("com.zwq.droidLock.DEVICE_UNLOCK_REQUEST")
+                    val receiver = object : BroadcastReceiver() {
+                        override fun onReceive(context: Context, intent: Intent) {
+                            if (filter.getAction(0) == intent.action) {
+                                thread {
+                                    context.getDPM().clearDeviceOwnerApp(context.dpcPackageName)
+                                    changeUI.value = !changeUI.value
+                                }
+                            }
+                        }
+                    }
+                    context.registerReceiver(receiver, filter)
+                }
+                val uiKey = changeUI.value
                 if (DROID_LOCK_UI_STATUS){
-                    Home(vm)
+                    Home(vm, key = uiKey)
                 }else{
-                    SetupScreen()
+                    SetupScreen(key = uiKey)
                 }
             }
         }
     }
-
     override fun onResume() {
         super.onResume()
         val sp = SharedPrefs(applicationContext)
@@ -182,181 +183,158 @@ class MainActivity : FragmentActivity() {
 
 
 @Composable
-fun SetupScreen() {
-    var isConfigured by remember { mutableStateOf(false) }
-    val context = LocalContext.current
-    val receiver = context.getReceiver()
-    var statusMessage by remember { mutableStateOf(getContext().getString(R.string.app_configuring_ing)) }
-    val scope = rememberCoroutineScope()
-    LaunchedEffect(Unit) {
-        scope.launch {
-            try {
-                val dpm = context.getDPM()
-                dpm.addUserRestriction(receiver, UserManager.DISALLOW_CONFIG_WIFI)
-                statusMessage = getContext().getString(R.string.app_wifi_disabling)
-                delay(1000)
-                if (VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    dpm.addUserRestriction(receiver, UserManager.DISALLOW_BLUETOOTH)
-                    dpm.addUserRestriction(receiver, UserManager.DISALLOW_BLUETOOTH_SHARING)
-                    statusMessage =getContext().getString(R.string.app_bluetooth_disabling)
-                    delay(1000)
-                }
-                statusMessage = getContext().getString(R.string.app_factory_reset_disabling)
-                dpm.addUserRestriction(receiver, UserManager.DISALLOW_FACTORY_RESET)
-                delay(1000)
-                statusMessage = getContext().getString(R.string.app_security_disabling)
-                dpm.addUserRestriction(receiver, UserManager.DISALLOW_SAFE_BOOT)
-                delay(1000)
+fun SetupScreen(key: Any) {
+   key(key) {
+       var isConfigured by remember { mutableStateOf(false) }
+       val context = LocalContext.current
+       val receiver = context.getReceiver()
+       var statusMessage by remember { mutableStateOf(getContext().getString(R.string.app_configuring_ing)) }
+       val scope = rememberCoroutineScope()
+       LaunchedEffect(Unit) {
+           scope.launch {
+               try {
+                   val dpm = context.getDPM()
+                   dpm.addUserRestriction(receiver, UserManager.DISALLOW_CONFIG_WIFI)
+                   statusMessage = getContext().getString(R.string.app_wifi_disabling)
+                   delay(1000)
+                   if (VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                       dpm.addUserRestriction(receiver, UserManager.DISALLOW_BLUETOOTH)
+                       dpm.addUserRestriction(receiver, UserManager.DISALLOW_BLUETOOTH_SHARING)
+                       statusMessage =getContext().getString(R.string.app_bluetooth_disabling)
+                       delay(1000)
+                   }
+                   statusMessage = getContext().getString(R.string.app_factory_reset_disabling)
+                   dpm.addUserRestriction(receiver, UserManager.DISALLOW_FACTORY_RESET)
+                   delay(1000)
+                   statusMessage = getContext().getString(R.string.app_security_disabling)
+                   dpm.addUserRestriction(receiver, UserManager.DISALLOW_SAFE_BOOT)
+                   delay(1000)
+                   statusMessage = getContext().getString(R.string.app_auto_update_disabling)
+                   val policy = SystemUpdatePolicy.createWindowedInstallPolicy(0, 0)
+                   dpm.setSystemUpdatePolicy(receiver, policy)
+                   statusMessage =getContext().getString(R.string.app_configuring_success)
+               } catch (e: Exception) {
+                   statusMessage = getContext().getString(R.string.app_configuring_failure)
+               }finally {
+                   isConfigured = true
+               }
+           }
+       }
 
-                statusMessage = getContext().getString(R.string.app_auto_update_disabling)
-                val policy = SystemUpdatePolicy.createWindowedInstallPolicy(0, 0)
-                dpm.setSystemUpdatePolicy(receiver, policy)
-                statusMessage =getContext().getString(R.string.app_configuring_success)
-            } catch (e: Exception) {
-                statusMessage = getContext().getString(R.string.app_configuring_failure)
-            }finally {
-                isConfigured = true
-            }
-        }
-    }
-
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = colorScheme.background
-    ) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center) {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally) {
-                if (!isConfigured) {
-                    CircularProgressIndicator()
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
-                Text(
-                    text = statusMessage,
-                    fontSize = 70.sp)
-            }
-        }
-    }
+       Surface(
+           modifier = Modifier.fillMaxSize(),
+           color = colorScheme.background
+       ) {
+           Box(
+               modifier = Modifier.fillMaxSize(),
+               contentAlignment = Alignment.Center) {
+               Column(
+                   modifier = Modifier.fillMaxWidth(),
+                   horizontalAlignment = Alignment.CenterHorizontally) {
+                   if (!isConfigured) {
+                       CircularProgressIndicator()
+                       Spacer(modifier = Modifier.height(16.dp))
+                   }
+                   Text(
+                       text = statusMessage,
+                       fontSize = 70.sp)
+               }
+           }
+       }
+   }
 }
 
 
 @ExperimentalMaterial3Api
 @Composable
-fun Home(vm: MyViewModel) {
-    val navController = rememberNavController()
-    val context = LocalContext.current
-    val receiver = context.getReceiver()
-    val focusMgr = LocalFocusManager.current
-    val backToHome by backToHomeStateFlow.collectAsState()
-    val lifecycleOwner = LocalLifecycleOwner.current
-    LaunchedEffect(backToHome) {
-        if(backToHome) { navController.navigateUp(); backToHomeStateFlow.value = false }
-    }
-    val userRestrictions by vm.userRestrictions.collectAsStateWithLifecycle()
-    fun navigateUp() { navController.navigateUp() }
-    fun navigate(destination: Any) { navController.navigate(destination) }
-    @Suppress("NewApi") NavHost(
-        navController = navController,
-        startDestination = Home,
-        modifier = Modifier
-            .fillMaxSize()
-            .background(colorScheme.background)
-            .imePadding()
-            .pointerInput(Unit) { detectTapGestures(onTap = { focusMgr.clearFocus() }) },
-        enterTransition = Animations.navHostEnterTransition,
-        exitTransition = Animations.navHostExitTransition,
-        popEnterTransition = Animations.navHostPopEnterTransition,
-        popExitTransition = Animations.navHostPopExitTransition
-    ) {
-        composable<Home> { HomeScreen { navController.navigate(it) } }
+fun Home(vm: MyViewModel, key: Any) {
+  key(key) {
+      val navController = rememberNavController()
+      val context = LocalContext.current
+      val receiver = context.getReceiver()
+      val focusMgr = LocalFocusManager.current
+      val backToHome by backToHomeStateFlow.collectAsState()
+      val lifecycleOwner = LocalLifecycleOwner.current
+      LaunchedEffect(backToHome) {
+          if(backToHome) { navController.navigateUp(); backToHomeStateFlow.value = false }
+      }
+      val userRestrictions by vm.userRestrictions.collectAsStateWithLifecycle()
+      fun navigateUp() { navController.navigateUp() }
+      fun navigate(destination: Any) { navController.navigate(destination) }
+      @Suppress("NewApi") NavHost(
+          navController = navController,
+          startDestination = Home,
+          modifier = Modifier
+              .fillMaxSize()
+              .background(colorScheme.background)
+              .imePadding()
+              .pointerInput(Unit) { detectTapGestures(onTap = { focusMgr.clearFocus() }) },
+          enterTransition = Animations.navHostEnterTransition,
+          exitTransition = Animations.navHostExitTransition,
+          popEnterTransition = Animations.navHostPopEnterTransition,
+          popExitTransition = Animations.navHostPopExitTransition
+      ) {
+          composable<Home> { HomeScreen { navController.navigate(it) } }
 
-        composable<Permissions> {
-            PermissionsScreen(::navigateUp, { navController.navigate(it) })
-        }
-        composable<Accounts>(mapOf(serializableNavTypePair<List<Accounts.Account>>())) { AccountsScreen(it.toRoute(), ::navigateUp) }
-        composable<DeviceAdmin> { DeviceAdminScreen(::navigateUp) }
-        composable<DeviceOwner> { DeviceOwnerScreen(::navigateUp) }
-        composable<DeviceInfo> { DeviceInfoScreen(::navigateUp) }
-        composable<SystemManager> { SystemManagerScreen(::navigateUp, ::navigate) }
-        composable<SystemOptions> { SystemOptionsScreen(::navigateUp) }
-        composable<Keyguard> { KeyguardScreen(::navigateUp) }
-        composable<PermissionPolicy> { PermissionPolicyScreen(::navigateUp) }
+          composable<Permissions> {
+              PermissionsScreen(::navigateUp, { navController.navigate(it) })
+          }
+          composable<DeviceAdmin> { DeviceAdminScreen(::navigateUp) }
+          composable<DeviceOwner> { DeviceOwnerScreen(::navigateUp) }
+          composable<UserRestriction> {
+              LaunchedEffect(Unit) {
+                  vm.userRestrictions.value = context.getDPM().getUserRestrictions(receiver)
+              }
+              UserRestrictionScreen(::navigateUp) { title, items ->
+                  navController.navigate(UserRestrictionOptions(title, items))
+              }
+          }
+          composable<UserRestrictionOptions>(mapOf(serializableNavTypePair<List<Restriction>>())) {
+              UserRestrictionOptionsScreen(it.toRoute(), userRestrictions, ::navigateUp) { id, status ->
+                  try {
+                      val dpm = context.getDPM()
+                      if(status) dpm.addUserRestriction(receiver, id)
+                      else dpm.clearUserRestriction(receiver, id)
+                      @SuppressLint("NewApi")
+                      vm.userRestrictions.value = dpm.getUserRestrictions(receiver)
+                  } catch(_: Exception) {
+                      context.showOperationResultToast(false)
+                  }
+              }
+          }
 
-        composable<Network> { NetworkScreen(::navigateUp, ::navigate) }
-        composable<NetworkOptions> { NetworkOptionsScreen(::navigateUp) }
-        composable<NetworkStatsViewer>(mapOf(serializableNavTypePair<List<NetworkStatsViewer.Data>>())) {
-            NetworkStatsViewerScreen(it.toRoute()) { navController.navigateUp() }
-        }
-        composable<UserRestriction> {
-            LaunchedEffect(Unit) {
-                vm.userRestrictions.value = context.getDPM().getUserRestrictions(receiver)
-            }
-            UserRestrictionScreen(::navigateUp) { title, items ->
-                navController.navigate(UserRestrictionOptions(title, items))
-            }
-        }
-        composable<UserRestrictionOptions>(mapOf(serializableNavTypePair<List<Restriction>>())) {
-            UserRestrictionOptionsScreen(it.toRoute(), userRestrictions, ::navigateUp) { id, status ->
-                try {
-                    val dpm = context.getDPM()
-                    if(status) dpm.addUserRestriction(receiver, id)
-                    else dpm.clearUserRestriction(receiver, id)
-                    @SuppressLint("NewApi")
-                    vm.userRestrictions.value = dpm.getUserRestrictions(receiver)
-                } catch(_: Exception) {
-                    context.showOperationResultToast(false)
-                }
-            }
-        }
+          composable<Password> { PasswordScreen(::navigateUp, ::navigate) }
+          composable<PasswordInfo> { PasswordInfoScreen(::navigateUp) }
+          composable<ResetPasswordToken> { ResetPasswordTokenScreen(::navigateUp) }
+          composable<ResetPassword> { ResetPasswordScreen(::navigateUp) }
+          composable<RequiredPasswordComplexity> { RequiredPasswordComplexityScreen(::navigateUp) }
+          composable<KeyguardDisabledFeatures> { KeyguardDisabledFeaturesScreen(::navigateUp) }
+          composable<RequiredPasswordQuality> { RequiredPasswordQualityScreen(::navigateUp) }
 
-        composable<Users> { UsersScreen(::navigateUp, ::navigate) }
-        composable<UsersOptions> { UsersOptionsScreen(::navigateUp) }
-        composable<UserOperation> { UserOperationScreen(::navigateUp) }
-        composable<Password> { PasswordScreen(::navigateUp, ::navigate) }
-        composable<PasswordInfo> { PasswordInfoScreen(::navigateUp) }
-        composable<ResetPasswordToken> { ResetPasswordTokenScreen(::navigateUp) }
-        composable<ResetPassword> { ResetPasswordScreen(::navigateUp) }
-        composable<RequiredPasswordComplexity> { RequiredPasswordComplexityScreen(::navigateUp) }
-        composable<KeyguardDisabledFeatures> { KeyguardDisabledFeaturesScreen(::navigateUp) }
-        composable<RequiredPasswordQuality> { RequiredPasswordQualityScreen(::navigateUp) }
+          composable<Settings> { SettingsScreen(::navigateUp, ::navigate) }
+          composable<SettingsOptions> { SettingsOptionsScreen(::navigateUp) }
+          composable<Appearance> {
+              val theme by vm.theme.collectAsStateWithLifecycle()
+              AppearanceScreen(::navigateUp, theme) { vm.theme.value = it }
+          }
+          composable<AppLockSettings> { AppLockSettingsScreen(::navigateUp) }
 
-        composable<Settings> { SettingsScreen(::navigateUp, ::navigate) }
-        composable<SettingsOptions> { SettingsOptionsScreen(::navigateUp) }
-        composable<Appearance> {
-            val theme by vm.theme.collectAsStateWithLifecycle()
-            AppearanceScreen(::navigateUp, theme) { vm.theme.value = it }
-        }
-        composable<AppLockSettings> { AppLockSettingsScreen(::navigateUp) }
-
-        dialog<AppLock>(dialogProperties = DialogProperties(false, false)) {
-            AppLockDialog(::navigateUp) { (context as? Activity)?.moveTaskToBack(true) }
-        }
-    }
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            if(event == Lifecycle.Event.ON_CREATE && !SharedPrefs(context).lockPassword.isNullOrEmpty()) {
-                navController.navigate(AppLock)
-            }
-        }
-        lifecycleOwner.lifecycle.addObserver(observer)
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
-    }
-    LaunchedEffect(Unit) {
-        val dpm = context.getDPM()
-        val sp = SharedPrefs(context)
-        val profileNotActivated = !sp.managedProfileActivated && context.isProfileOwner && (VERSION.SDK_INT < 24 || dpm.isManagedProfile(receiver))
-        if(profileNotActivated) {
-            dpm.setProfileEnabled(receiver)
-            sp.managedProfileActivated = true
-            Toast.makeText(context, R.string.work_profile_activated, Toast.LENGTH_SHORT).show()
-        }
-    }
-    DhizukuErrorDialog()
+          dialog<AppLock>(dialogProperties = DialogProperties(false, false)) {
+              AppLockDialog(::navigateUp) { (context as? Activity)?.moveTaskToBack(true) }
+          }
+      }
+      DisposableEffect(lifecycleOwner) {
+          val observer = LifecycleEventObserver { _, event ->
+              if(event == Lifecycle.Event.ON_CREATE && !SharedPrefs(context).lockPassword.isNullOrEmpty()) {
+                  navController.navigate(AppLock)
+              }
+          }
+          lifecycleOwner.lifecycle.addObserver(observer)
+          onDispose {
+              lifecycleOwner.lifecycle.removeObserver(observer)
+          }
+      }
+  }
 }
 
 @Serializable private object Home
@@ -364,11 +342,9 @@ fun Home(vm: MyViewModel) {
 @Composable
 private fun HomeScreen(onNavigate: (Any) -> Unit) {
     val context = LocalContext.current
-    val dpm = context.getDPM()
-    val receiver = context.getReceiver()
     var activated by remember { mutableStateOf(false) }
-    val deviceOwner = context.isDeviceOwner
-    val profileOwner = context.isProfileOwner
+    var deviceOwner = context.isDeviceOwner
+    var profileOwner = context.isProfileOwner
     val refreshStatus by dhizukuErrorStatus.collectAsState()
     LaunchedEffect(refreshStatus) {
         activated = context.isProfileOwner || context.isDeviceOwner
@@ -434,37 +410,6 @@ fun HomePageItem(name: Int, imgVector: Int, onClick: () -> Unit) {
             text = stringResource(name),
             style = typography.headlineSmall,
             modifier = Modifier.padding(bottom = if(zhCN) { 2 } else { 0 }.dp)
-        )
-    }
-}
-
-@Composable
-private fun DhizukuErrorDialog() {
-    val status by dhizukuErrorStatus.collectAsState()
-    if (status != 0) {
-        val sp = SharedPrefs(LocalContext.current)
-        LaunchedEffect(Unit) {
-            sp.dhizuku = false
-        }
-        AlertDialog(
-            onDismissRequest = { dhizukuErrorStatus.value = 0 },
-            confirmButton = {
-                TextButton(onClick = { dhizukuErrorStatus.value = 0 }) {
-                    Text(stringResource(R.string.confirm))
-                }
-            },
-            title = { Text(stringResource(R.string.dhizuku)) },
-            text = {
-                var text = stringResource(
-                    when(status){
-                        1 -> R.string.failed_to_init_dhizuku
-                        2 -> R.string.dhizuku_permission_not_granted
-                        else -> R.string.failed_to_init_dhizuku
-                    }
-                )
-                if(sp.dhizuku) text += "\n" + stringResource(R.string.dhizuku_mode_disabled)
-                Text(text)
-            }
         )
     }
 }

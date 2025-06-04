@@ -1,12 +1,7 @@
 package com.zzh.droidlock.dpm
 
 import android.annotation.SuppressLint
-import android.app.admin.DevicePolicyManager
-import android.content.ActivityNotFoundException
-import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
-import android.os.Build.VERSION
 import android.os.UserManager
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
@@ -17,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -50,12 +44,9 @@ import com.zzh.droidlock.R
 import com.zzh.droidlock.SharedPrefs
 import com.zzh.droidlock.backToHomeStateFlow
 import com.zzh.droidlock.ui.CheckBoxItem
-import com.zzh.droidlock.ui.CopyTextButton
 import com.zzh.droidlock.ui.FunctionItem
-import com.zzh.droidlock.ui.InfoItem
 import com.zzh.droidlock.ui.MyScaffold
 import com.zzh.droidlock.writeClipBoard
-import com.zzh.droidlock.yesOrNo
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
@@ -268,60 +259,5 @@ fun DeviceOwnerScreen(onNavigateUp: () -> Unit) {
                 }
             }
         )
-    }
-}
-
-
-
-@Serializable object DeviceInfo
-
-@Composable
-fun DeviceInfoScreen(onNavigateUp: () -> Unit) {
-    val context = LocalContext.current
-    val dpm = context.getDPM()
-    val receiver = context.getReceiver()
-    var dialog by remember { mutableIntStateOf(0) }
-    MyScaffold(R.string.device_info, onNavigateUp, 0.dp) {
-        if(VERSION.SDK_INT>=34 && (context.isDeviceOwner || dpm.isOrgProfile(receiver))) {
-            InfoItem(R.string.financed_device, dpm.isDeviceFinanced.yesOrNo)
-        }
-        if(VERSION.SDK_INT >= 33) {
-            val dpmRole = dpm.devicePolicyManagementRoleHolderPackage
-            InfoItem(R.string.dpmrh, if(dpmRole == null) stringResource(R.string.none) else dpmRole)
-        }
-        val encryptionStatus = mutableMapOf(
-            DevicePolicyManager.ENCRYPTION_STATUS_INACTIVE to R.string.es_inactive,
-            DevicePolicyManager.ENCRYPTION_STATUS_ACTIVE to R.string.es_active,
-            DevicePolicyManager.ENCRYPTION_STATUS_UNSUPPORTED to R.string.es_unsupported
-        )
-        if(VERSION.SDK_INT >= 23) { encryptionStatus[DevicePolicyManager.ENCRYPTION_STATUS_ACTIVE_DEFAULT_KEY] = R.string.es_active_default_key }
-        if(VERSION.SDK_INT >= 24) { encryptionStatus[DevicePolicyManager.ENCRYPTION_STATUS_ACTIVE_PER_USER] = R.string.es_active_per_user }
-        InfoItem(R.string.encryption_status, encryptionStatus[dpm.storageEncryptionStatus] ?: R.string.unknown)
-        if(VERSION.SDK_INT >= 28) {
-            InfoItem(R.string.support_device_id_attestation, dpm.isDeviceIdAttestationSupported.yesOrNo, true) { dialog = 1 }
-        }
-        if (VERSION.SDK_INT >= 30) {
-            InfoItem(R.string.support_unique_device_attestation, dpm.isUniqueDeviceAttestationSupported.yesOrNo, true) { dialog = 2 }
-        }
-        val adminList = dpm.activeAdmins
-        if(adminList != null) {
-            InfoItem(R.string.activated_device_admin, adminList.map { it.flattenToShortString() }.joinToString("\n"))
-        }
-    }
-    if(dialog != 0) AlertDialog(
-        text = { Text(stringResource(if(dialog == 1) R.string.info_device_id_attestation else R.string.info_unique_device_attestation)) },
-        confirmButton = { TextButton(onClick = { dialog = 0 }) { Text(stringResource(R.string.confirm)) } },
-        onDismissRequest = { dialog = 0 }
-    )
-}
-
-private fun activateDeviceAdmin(inputContext:Context,inputComponent:ComponentName) {
-    try {
-        val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN)
-        intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, inputComponent)
-        intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, inputContext.getString(R.string.activate_device_admin_here))
-        addDeviceAdmin.launch(intent)
-    } catch(_:ActivityNotFoundException) {
-        Toast.makeText(inputContext, R.string.unsupported, Toast.LENGTH_SHORT).show()
     }
 }

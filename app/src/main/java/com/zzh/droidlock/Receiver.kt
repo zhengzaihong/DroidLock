@@ -1,31 +1,19 @@
 package com.zzh.droidlock
-
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.admin.DeviceAdminReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
-import android.graphics.drawable.Icon
-import android.net.wifi.WifiManager
 import android.os.Build.VERSION
 import android.os.PersistableBundle
 import android.os.UserHandle
 import android.os.UserManager
-import android.util.Log
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
-import androidx.core.graphics.drawable.toBitmap
-import com.zzh.droidlock.dpm.handleNetworkLogs
 import com.zzh.droidlock.dpm.isDeviceOwner
 import com.zzh.droidlock.dpm.isProfileOwner
-import com.zzh.droidlock.dpm.processSecurityLogs
-import com.zzh.droidlock.dpm.setDefaultAffiliationID
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -33,7 +21,7 @@ import java.util.Locale
 class Receiver : DeviceAdminReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
-        Log.d("WifiReceiver",intent.action.toString())
+//        Log.d("---->WifiReceiver",intent.action.toString())
         if(VERSION.SDK_INT >= 26 && intent.action == "com.zzh.droidlock.action.STOP_LOCK_TASK_MODE") {
             val dpm = getManager(context)
             val receiver = ComponentName(context, this::class.java)
@@ -46,20 +34,6 @@ class Receiver : DeviceAdminReceiver() {
 
     override fun onEnabled(context: Context, intent: Intent) {
         super.onEnabled(context, intent)
-        if(context.isProfileOwner || context.isDeviceOwner){
-            setDefaultAffiliationID(context)
-            Toast.makeText(context, context.getString(R.string.onEnabled), Toast.LENGTH_SHORT).show()
-            if(VERSION.SDK_INT >= 25) {
-                val sm = context.getSystemService(ShortcutManager::class.java)
-                val lockIntent = Intent("com.zzh.droidlock.action.LOCK")
-                    .setComponent(ComponentName(context, ShortcutsReceiverActivity::class.java))
-                val shortcut = ShortcutInfo.Builder(context, "LockScreen")
-                    .setShortLabel(context.getString(R.string.lock_now))
-                    .setIcon(Icon.createWithBitmap(context.getDrawable(R.drawable.screen_lock_portrait_fill0)?.toBitmap()))
-                    .setIntent(lockIntent)
-                sm.addDynamicShortcuts(listOf(shortcut.build()))
-            }
-        }
     }
 
     override fun onDisabled(context: Context, intent: Intent) {
@@ -77,29 +51,6 @@ class Receiver : DeviceAdminReceiver() {
         Toast.makeText(context, R.string.create_work_profile_success, Toast.LENGTH_SHORT).show()
     }
 
-    override fun onNetworkLogsAvailable(context: Context, intent: Intent, batchToken: Long, networkLogsCount: Int) {
-        super.onNetworkLogsAvailable(context, intent, batchToken, networkLogsCount)
-        if(VERSION.SDK_INT >= 26) {
-            CoroutineScope(Dispatchers.IO).launch {
-                handleNetworkLogs(context, batchToken)
-            }
-        }
-    }
-
-    override fun onSecurityLogsAvailable(context: Context, intent: Intent) {
-        super.onSecurityLogsAvailable(context, intent)
-        if(VERSION.SDK_INT >= 24) {
-            CoroutineScope(Dispatchers.IO).launch {
-                val events = getManager(context).retrieveSecurityLogs(ComponentName(context, this@Receiver::class.java)) ?: return@launch
-                val file = context.filesDir.resolve("SecurityLogs.json")
-                val fileExists = file.exists()
-                file.outputStream().use {
-                    if(fileExists) it.write(",".encodeToByteArray())
-                    processSecurityLogs(events, it)
-                }
-            }
-        }
-    }
 
     override fun onTransferOwnershipComplete(context: Context, bundle: PersistableBundle?) {
         super.onTransferOwnershipComplete(context, bundle)

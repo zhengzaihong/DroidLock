@@ -25,7 +25,6 @@
         android:theme="@style/Theme.DroidLock"
         android:enableOnBackInvokedCallback="true"
         android:testOnly="false"
-        android:manageSpaceActivity=".ManageSpaceActivity"
         tools:targetApi="35">
         <activity
             android:name=".MainActivity"
@@ -43,15 +42,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ManageSpaceActivity"
-            android:theme="@style/Theme.Transparent">
-        </activity>
-        <activity
-            android:name=".ShortcutsReceiverActivity"
-            android:permission="com.zzh.droidLock.MyPermission"
-            android:exported="true"
-            android:theme="@android:style/Theme.NoDisplay" />
         <receiver
             android:name=".Receiver"
             android:description="@string/app_name"
@@ -60,6 +50,7 @@
             <meta-data
                 android:name="android.app.device_admin"
                 android:resource="@xml/device_admin"/>
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.app.action.PROVISIONING_SUCCESSFUL" />
@@ -71,10 +62,7 @@
                 <action android:name="android.intent.action.WIFI_STATE_CHANGED" />
             </intent-filter>
         </receiver>
-        <receiver
-            android:name=".ApiReceiver"
-            android:exported="true">
-        </receiver>
+
         <provider
             android:name="rikka.shizuku.ShizukuProvider"
             android:authorities="${applicationId}.shizuku"
