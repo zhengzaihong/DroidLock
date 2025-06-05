@@ -121,7 +121,8 @@ import kotlin.concurrent.thread
 val backToHomeStateFlow = MutableStateFlow(false)
 
 // UI-Model
-const val DROID_LOCK_UI_STATUS = true
+// ui版本和无UI版本的控制  true-UI; false-无UI
+const val DROID_LOCK_UI_STATUS = false
 
 
 
@@ -142,7 +143,7 @@ class MainActivity : FragmentActivity() {
         setContent {
             val theme by vm.theme.collectAsStateWithLifecycle()
             DroidLockTheme(theme) {
-                // 收到解除-重组
+                // 收到解除-重组UI
                 val changeUI = remember { mutableStateOf(false) }
                 LaunchedEffect(Unit) {
                     val filter = IntentFilter("com.zwq.droidLock.DEVICE_UNLOCK_REQUEST")

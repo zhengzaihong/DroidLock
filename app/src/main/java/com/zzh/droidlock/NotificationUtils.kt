@@ -8,7 +8,6 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
-import com.zzh.droidlock.R
 
 object NotificationUtils {
     fun checkPermission(context: Context): Boolean {
