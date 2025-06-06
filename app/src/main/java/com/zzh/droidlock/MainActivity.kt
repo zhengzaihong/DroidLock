@@ -204,15 +204,17 @@ fun SetupScreen(key: Any) {
                        statusMessage =getContext().getString(R.string.app_bluetooth_disabling)
                        delay(1000)
                    }
-                   statusMessage = getContext().getString(R.string.app_factory_reset_disabling)
-                   dpm.addUserRestriction(receiver, UserManager.DISALLOW_FACTORY_RESET)
-                   delay(1000)
-                   statusMessage = getContext().getString(R.string.app_security_disabling)
-                   dpm.addUserRestriction(receiver, UserManager.DISALLOW_SAFE_BOOT)
-                   delay(1000)
-                   statusMessage = getContext().getString(R.string.app_auto_update_disabling)
-                   val policy = SystemUpdatePolicy.createWindowedInstallPolicy(0, 0)
-                   dpm.setSystemUpdatePolicy(receiver, policy)
+//                   statusMessage = getContext().getString(R.string.app_factory_reset_disabling)
+//                   dpm.addUserRestriction(receiver, UserManager.DISALLOW_FACTORY_RESET)
+//                   delay(1000)
+//                   statusMessage = getContext().getString(R.string.app_security_disabling)
+//                   dpm.addUserRestriction(receiver, UserManager.DISALLOW_SAFE_BOOT)
+//                   delay(1000)
+//                   statusMessage = getContext().getString(R.string.app_auto_update_disabling)
+//                   val policy = SystemUpdatePolicy.createWindowedInstallPolicy(0, 0)
+//                   dpm.setSystemUpdatePolicy(receiver, policy)
+
+
                    statusMessage =getContext().getString(R.string.app_configuring_success)
                } catch (e: Exception) {
                    statusMessage = getContext().getString(R.string.app_configuring_failure)
