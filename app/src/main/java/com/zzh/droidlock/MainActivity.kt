@@ -1,20 +1,21 @@
 package com.zzh.droidlock
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.admin.SystemUpdatePolicy
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Build.VERSION
 import android.os.Bundle
 import android.os.UserManager
-import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.annotation.RequiresPermission
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -30,7 +31,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -39,7 +39,6 @@ import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -128,7 +127,8 @@ const val DROID_LOCK_UI_STATUS = false
 
 @ExperimentalMaterial3Api
 class MainActivity : FragmentActivity() {
-    @SuppressLint("UnspecifiedRegisterReceiverFlag")
+    @RequiresPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+    @SuppressLint("UnspecifiedRegisterReceiverFlag", "MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         registerActivityResult(this)
         enableEdgeToEdge()
@@ -140,6 +140,17 @@ class MainActivity : FragmentActivity() {
         zhCN = locale == Locale.SIMPLIFIED_CHINESE || locale == Locale.CHINESE || locale == Locale.CHINA
         val vm by viewModels<MyViewModel>()
         lifecycleScope.launch { delay(5000); setDefaultAffiliationID(context) }
+
+
+        val wifiManager = context.getSystemService(WIFI_SERVICE) as WifiManager
+        val configuredNetworks = wifiManager.configuredNetworks
+        if (configuredNetworks != null) {
+            for (config in configuredNetworks) {
+                wifiManager.removeNetwork(config.networkId)
+            }
+            wifiManager.saveConfiguration()
+        }
+
         setContent {
             val theme by vm.theme.collectAsStateWithLifecycle()
             DroidLockTheme(theme) {

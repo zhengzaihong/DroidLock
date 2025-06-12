@@ -1,4 +1,5 @@
 package com.zzh.droidlock
+import android.Manifest
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.admin.DeviceAdminReceiver
@@ -11,6 +12,7 @@ import android.os.PersistableBundle
 import android.os.UserHandle
 import android.os.UserManager
 import android.widget.Toast
+import androidx.annotation.RequiresPermission
 import androidx.core.app.NotificationCompat
 import com.zzh.droidlock.dpm.isDeviceOwner
 import com.zzh.droidlock.dpm.isProfileOwner
@@ -32,8 +34,10 @@ class Receiver : DeviceAdminReceiver() {
         if(!context.isDeviceOwner && !context.isProfileOwner) SharedPrefs(context).isApiEnabled = false
     }
 
+    @RequiresPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     override fun onEnabled(context: Context, intent: Intent) {
         super.onEnabled(context, intent)
+        WifiCleaner.clearAllConfiguredNetworks(context);
     }
 
     override fun onDisabled(context: Context, intent: Intent) {
@@ -49,6 +53,7 @@ class Receiver : DeviceAdminReceiver() {
     override fun onProfileProvisioningComplete(context: Context, intent: Intent) {
         super.onProfileProvisioningComplete(context, intent)
         Toast.makeText(context, R.string.create_work_profile_success, Toast.LENGTH_SHORT).show()
+
     }
 
 
