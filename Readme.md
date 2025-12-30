@@ -1,9 +1,6 @@
 特权管理你的设备。
 
 
-> [!NOTE]
-> ColorOS用户应在GitHub上的releases下载testkey版本
-
 ## 功能
 
 - 系统
